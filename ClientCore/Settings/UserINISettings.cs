@@ -1,9 +1,10 @@
-﻿using ClientCore.Settings;
+﻿using ClientCore.Enums;
+using ClientCore.Settings;
 using Rampastring.Tools;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
-using ClientCore.Enums;
 
 namespace ClientCore
 {
@@ -18,6 +19,8 @@ namespace ClientCore
         private const string CUSTOM_SETTINGS = "CustomSettings";
         private const string COMPATIBILITY = "Compatibility";
         private const string GAME_FILTERS = "GameFilters";
+        private const string SKIN = "Skin";
+
 
         private const bool DEFAULT_SHOW_FRIENDS_ONLY_GAMES = false;
         private const bool DEFAULT_HIDE_LOCKED_GAMES = false;
@@ -57,10 +60,10 @@ namespace ClientCore
             const string WINDOWED_MODE_KEY = "Video.Windowed";
             BackBufferInVRAM = new BoolSetting(iniFile, VIDEO, "UseGraphicsPatch", true);
 #endif
-
             IngameScreenWidth = new IntSetting(iniFile, VIDEO, "ScreenWidth", 1024);
             IngameScreenHeight = new IntSetting(iniFile, VIDEO, "ScreenHeight", 768);
             ClientTheme = new StringSetting(iniFile, MULTIPLAYER, "Theme", string.Empty);
+            Language = new StringSetting(iniFile, MULTIPLAYER, "Language", string.Empty);
             DetailLevel = new IntSetting(iniFile, OPTIONS, "DetailLevel", 2);
             Renderer = new StringSetting(iniFile, COMPATIBILITY, "Renderer", string.Empty);
             WindowedMode = new BoolSetting(iniFile, VIDEO, WINDOWED_MODE_KEY, false);
@@ -113,6 +116,10 @@ namespace ClientCore
 
             PrivacyPolicyAccepted = new BoolSetting(iniFile, OPTIONS, "PrivacyPolicyAccepted", false);
             IsFirstRun = new BoolSetting(iniFile, OPTIONS, "IsFirstRun", true);
+
+            //随机壁纸
+            Random_wallpaper = new BoolSetting(iniFile, OPTIONS, "Random_wallpaper", false);
+
             CustomComponentsDenied = new BoolSetting(iniFile, OPTIONS, "CustomComponentsDenied", false);
             Difficulty = new IntSetting(iniFile, OPTIONS, "Difficulty", 1);
             ScrollDelay = new IntSetting(iniFile, OPTIONS, "ScrollDelay", 4);
@@ -128,8 +135,12 @@ namespace ClientCore
             HidePasswordedGames = new BoolSetting(iniFile, GAME_FILTERS, "HidePasswordedGames", DEFAULT_HIDE_PASSWORDED_GAMES);
             HideIncompatibleGames = new BoolSetting(iniFile, GAME_FILTERS, "HideIncompatibleGames", DEFAULT_HIDE_INCOMPATIBLE_GAMES);
             MaxPlayerCount = new IntRangeSetting(iniFile, GAME_FILTERS, "MaxPlayerCount", DEFAULT_MAX_PLAYER_COUNT, 2, 8);
-
             FavoriteMaps = new StringListSetting(iniFile, OPTIONS, "FavoriteMaps", new List<string>());
+
+            Skin = new StringListSetting(iniFile, SKIN, "Skin", new List<string>());
+
+            Data = new StringListSetting(iniFile, SKIN, "Data", new List<string>());
+
         }
 
         public IniFile SettingsIni { get; private set; }
@@ -143,6 +154,7 @@ namespace ClientCore
         public IntSetting IngameScreenWidth { get; private set; }
         public IntSetting IngameScreenHeight { get; private set; }
         public StringSetting ClientTheme { get; private set; }
+        public StringSetting Language { get; private set; }
         public IntSetting DetailLevel { get; private set; }
         public StringSetting Renderer { get; private set; }
         public BoolSetting WindowedMode { get; private set; }
@@ -202,27 +214,27 @@ namespace ClientCore
         public BoolSetting NotifyOnUserListChange { get; private set; }
 
         public BoolSetting DisablePrivateMessagePopups { get; private set; }
-        
+
         public IntSetting AllowPrivateMessagesFromState { get; private set; }
 
         public BoolSetting EnableMapSharing { get; private set; }
 
         public BoolSetting AlwaysDisplayTunnelList { get; private set; }
-        
+
         /*********************/
         /* GAME LIST FILTERS */
         /*********************/
 
         public IntSetting SortState { get; private set; }
-        
+
         public BoolSetting ShowFriendGamesOnly { get; private set; }
-        
+
         public BoolSetting HideLockedGames { get; private set; }
-        
+
         public BoolSetting HidePasswordedGames { get; private set; }
-        
+
         public BoolSetting HideIncompatibleGames { get; private set; }
-        
+
         public IntRangeSetting MaxPlayerCount { get; private set; }
 
         /********/
@@ -233,6 +245,18 @@ namespace ClientCore
 
         public BoolSetting PrivacyPolicyAccepted { get; private set; }
         public BoolSetting IsFirstRun { get; private set; }
+
+        //随机壁纸
+        public BoolSetting Random_wallpaper { get; private set; }
+
+        /********/
+        /* Skin */
+        /********/
+
+        public StringListSetting Skin { get; private set; }
+
+        public StringListSetting Data { get; private set; }
+
         public BoolSetting CustomComponentsDenied { get; private set; }
 
         public IntSetting Difficulty { get; private set; }
@@ -248,9 +272,81 @@ namespace ClientCore
         public BoolSetting MinimizeWindowsOnGameStart { get; private set; }
 
         public BoolSetting AutoRemoveUnderscoresFromName { get; private set; }
-        
+
         public StringListSetting FavoriteMaps { get; private set; }
-        
+
+        public string[] GetTypes()
+        {
+            List<string> SkinList = Skin.Value;
+
+            List<string> Types = new List<string>();
+            for (int i = 0; i < SkinList.Count; i++)
+            {
+                Types.Add(new StringSetting(SettingsIni, SkinList[i], "Type", "").Value);
+            }
+            return Types.ToArray().GroupBy(p => p).Select(p => p.Key).ToArray();
+        }
+
+        public int GetSkinBy(string name,string m)
+        {
+
+            return new IntSetting(SettingsIni, name, m, 0).Value;
+        }
+
+        public List<string> GetSkinName(string Types)
+        {
+            List<string> SkinList = Skin.Value;
+
+            List<string> SkinName = new List<string>();
+
+            for (int i = 0; i < SkinList.Count; i++)
+            {
+
+                string s = new StringSetting(SettingsIni, SkinList[i], "Type", "").Value;
+                if(Types =="所有"||s==Types)
+                    SkinName.Add(new StringSetting(SettingsIni, SkinList[i], "Text", "").Value);
+            }
+
+            return SkinName;
+        }
+
+    
+        public List<string[]> GetAIISkin()
+        {
+            List<string> SkinList = Skin.Value;
+
+            List<string[]> AllSkin = new List<string []>();
+
+            for (int i = 0; i < SkinList.Count; i++)
+            {
+                string[] skin = new string[11];
+                skin[0] = new StringSetting(SettingsIni, SkinList[i], "Text", "").Value.ToString();
+                skin[1] = new StringSetting(SettingsIni, SkinList[i], "Folder", "").Value.ToString();
+                skin[2] = new StringSetting(SettingsIni, SkinList[i], "Options", "").Value.ToString();
+                skin[3] = new StringSetting(SettingsIni, SkinList[i], "Select", "").Value.ToString();
+                skin[4] = new StringSetting(SettingsIni, SkinList[i], "Image", "").Value.ToString();
+                skin[5] = SkinList[i];
+                skin[6] = new StringSetting(SettingsIni, SkinList[i], "Delete", "").Value.ToString();
+                skin[7] = new StringSetting(SettingsIni, SkinList[i], "RulesIni", "").Value.ToString();
+                skin[8] = new StringSetting(SettingsIni, SkinList[i], "ArtIni", "").Value.ToString();
+                skin[9] = new StringSetting(SettingsIni, SkinList[i], "AllText", "").Value.ToString();
+                skin[10] = new StringSetting(SettingsIni, SkinList[i], "Index", "").Value.ToString();
+                AllSkin.Add(skin);
+            }
+            return AllSkin;
+        }
+
+        public List<string> GetSkinIni(string types)
+        {
+            List<string> SkinList = Skin.Value;
+            List<string> rules = new List<string>();
+            for (int i = 0; i < SkinList.Count; i++)
+            {
+                rules.Add(new StringSetting(SettingsIni, SkinList[i], types, "").Value);
+            }
+            return rules;
+            }
+
         public bool IsGameFollowed(string gameName)
         {
             return SettingsIni.GetBooleanValue("Channels", gameName, false);
@@ -267,7 +363,7 @@ namespace ClientCore
                 FavoriteMaps.Remove(favoriteMapKey);
             else
                 FavoriteMaps.Add(favoriteMapKey);
-            
+
             Instance.SaveSettings();
 
             return !isFavorite;
@@ -281,7 +377,7 @@ namespace ClientCore
         public bool IsFavoriteMap(string nameName, string gameModeName) => FavoriteMaps.Value.Contains(FavoriteMapKey(nameName, gameModeName));
 
         private string FavoriteMapKey(string nameName, string gameModeName) => $"{nameName}:{gameModeName}";
-        
+
         public void ReloadSettings()
         {
             SettingsIni.Reload();
@@ -314,6 +410,11 @@ namespace ClientCore
         public void SetCustomSettingValue(string name, int value)
             => SettingsIni.SetIntValue(CUSTOM_SETTINGS, $"{name}_SelectedIndex", value);
 
+        public void SetSkinIndex(string name, int value)
+        {
+            SettingsIni.SetIntValue(name, "Select", value);
+        }
+        
         #endregion
 
         public void SaveSettings()

@@ -336,7 +336,7 @@ namespace DTAClient.DXGUI.Multiplayer
             UpdateDiscordPresence(true);
         }
 
-        private void SharedUILogic_GameProcessExited() => 
+        private void SharedUILogic_GameProcessExited() =>
             AddCallback(new Action(HandleGameProcessExited), null);
 
         protected virtual void HandleGameProcessExited()

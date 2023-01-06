@@ -16,7 +16,7 @@ namespace DTAConfig.OptionPanels
     /// </summary>
     internal abstract class XNAOptionsPanel : XNAWindowBase
     {
-        public XNAOptionsPanel(WindowManager windowManager, 
+        public XNAOptionsPanel(WindowManager windowManager,
             UserINISettings iniSettings) : base(windowManager)
         {
             IniSettings = iniSettings;
@@ -72,7 +72,7 @@ namespace DTAConfig.OptionPanels
             bool restartRequired = false;
             foreach (var setting in customSettings)
                 restartRequired = setting.Save() || restartRequired;
-            
+
             return restartRequired;
         }
 

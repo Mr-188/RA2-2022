@@ -44,8 +44,8 @@ namespace DTAClient.DXGUI.Generic
             lbSaveGameList = new XNAMultiColumnListBox(WindowManager);
             lbSaveGameList.Name = nameof(lbSaveGameList);
             lbSaveGameList.ClientRectangle = new Rectangle(13, 13, 574, 317);
-            lbSaveGameList.AddColumn("SAVED GAME NAME", 400);
-            lbSaveGameList.AddColumn("DATE / TIME", 174);
+            lbSaveGameList.AddColumn("保存的游戏", 400);
+            lbSaveGameList.AddColumn("时间", 174);
             lbSaveGameList.BackgroundTexture = AssetLoader.CreateTexture(new Color(0, 0, 0, 128), 1, 1);
             lbSaveGameList.PanelBackgroundDrawMode = PanelBackgroundImageDrawMode.STRETCHED;
             lbSaveGameList.SelectedIndexChanged += ListBox_SelectedIndexChanged;
@@ -54,21 +54,21 @@ namespace DTAClient.DXGUI.Generic
             btnLaunch = new XNAClientButton(WindowManager);
             btnLaunch.Name = nameof(btnLaunch);
             btnLaunch.ClientRectangle = new Rectangle(125, 345, 110, 23);
-            btnLaunch.Text = "Load";
+            btnLaunch.Text = "载入";
             btnLaunch.AllowClick = false;
             btnLaunch.LeftClick += BtnLaunch_LeftClick;
 
             btnDelete = new XNAClientButton(WindowManager);
             btnDelete.Name = nameof(btnDelete);
             btnDelete.ClientRectangle = new Rectangle(btnLaunch.Right + 10, btnLaunch.Y, 110, 23);
-            btnDelete.Text = "Delete";
+            btnDelete.Text = "删除";
             btnDelete.AllowClick = false;
             btnDelete.LeftClick += BtnDelete_LeftClick;
 
             btnCancel = new XNAClientButton(WindowManager);
             btnCancel.Name = nameof(btnCancel);
             btnCancel.ClientRectangle = new Rectangle(btnDelete.Right + 10, btnLaunch.Y, 110, 23);
-            btnCancel.Text = "Cancel";
+            btnCancel.Text = "取消";
             btnCancel.LeftClick += BtnCancel_LeftClick;
 
             AddChild(lbSaveGameList);
@@ -138,14 +138,14 @@ namespace DTAClient.DXGUI.Generic
         private void BtnDelete_LeftClick(object sender, EventArgs e)
         {
             SavedGame sg = savedGames[lbSaveGameList.SelectedIndex];
-            var msgBox = new XNAMessageBox(WindowManager, "Delete Confirmation",
-                    "The following saved game will be deleted permanently:" + Environment.NewLine +
+            var msgBox = new XNAMessageBox(WindowManager, "删除确认",
+                    "以下保存的游戏将被永久删除:" + Environment.NewLine +
                     Environment.NewLine +
-                    "Filename: " + sg.FileName + Environment.NewLine +
-                    "Saved game name: " + Renderer.GetSafeString(sg.GUIName, lbSaveGameList.FontIndex) + Environment.NewLine +
-                    "Date and time: " + sg.LastModified.ToString() + Environment.NewLine +
+                    "文件名: " + sg.FileName + Environment.NewLine +
+                    "保存的游戏名: " + Renderer.GetSafeString(sg.GUIName, lbSaveGameList.FontIndex) + Environment.NewLine +
+                    "时间: " + sg.LastModified.ToString() + Environment.NewLine +
                     Environment.NewLine +
-                    "Are you sure you want to proceed?", XNAMessageBoxButtons.YesNo);
+                    "您确定要继续吗?", XNAMessageBoxButtons.YesNo);
             msgBox.Show();
             msgBox.YesClickedAction = DeleteMsgBox_YesClicked;
         }
@@ -158,7 +158,7 @@ namespace DTAClient.DXGUI.Generic
             File.Delete(ProgramConstants.GamePath + SAVED_GAMES_DIRECTORY + Path.DirectorySeparatorChar + sg.FileName);
             ListSaves();
         }
-        
+
         private void GameProcessExited_Callback()
         {
             WindowManager.AddCallback(new Action(GameProcessExited), null);
@@ -182,7 +182,7 @@ namespace DTAClient.DXGUI.Generic
                 return;
             }
 
-            string[] files = Directory.GetFiles(ProgramConstants.GamePath + 
+            string[] files = Directory.GetFiles(ProgramConstants.GamePath +
                 SAVED_GAMES_DIRECTORY + Path.DirectorySeparatorChar,
                 "*.SAV", SearchOption.TopDirectoryOnly);
 

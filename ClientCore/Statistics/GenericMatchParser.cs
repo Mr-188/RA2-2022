@@ -2,7 +2,7 @@
 {
     public abstract class GenericMatchParser
     {
-        public MatchStatistics Statistics {get; set;}
+        public MatchStatistics Statistics { get; set; }
 
         public GenericMatchParser(MatchStatistics ms)
         {

@@ -134,6 +134,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClientGUICreator.cs" />
+    <Compile Include="IMENativeWindow.cs" />
+    <Compile Include="IMMCompositionResultHandler.cs" />
+    <Compile Include="IMMNativeMethods.cs" />
+    <Compile Include="INIConfigException.cs" />
+    <Compile Include="INItializableWindow.cs" />
+    <Compile Include="Parser.cs" />
     <Compile Include="ToolTip.cs" />
     <Compile Include="UIDesignConstants.cs" />
     <Compile Include="XNAChatTextBox.cs" />
@@ -170,6 +176,10 @@
       <Project>{daa331a7-fdac-44fd-98b5-2dc5025f48c3}</Project>
       <Name>ClientCore</Name>
       <SetConfiguration>Platform=$(Platform)</SetConfiguration>
+    </ProjectReference>
+    <ProjectReference Include="..\Localization\Localization.csproj">
+      <Project>{2cd114e3-c30f-4a95-9b4a-455c2c8f82e5}</Project>
+      <Name>Localization</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

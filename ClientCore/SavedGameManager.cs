@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Rampastring.Tools;
+using System;
 using System.Collections.Generic;
 using System.IO;
-using Rampastring.Tools;
 
 namespace ClientCore
 {
@@ -167,7 +167,7 @@ namespace ClientCore
             {
                 for (int i = 0; i < 1000; i++)
                 {
-                    File.Delete(GetSaveGameDirectoryPath() + 
+                    File.Delete(GetSaveGameDirectoryPath() +
                         "/" + string.Format("SVGM_{0}.NET", i.ToString("D3")));
                 }
             }

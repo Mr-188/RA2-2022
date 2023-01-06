@@ -113,7 +113,7 @@ namespace DTAClient.DXGUI.Multiplayer
                 this.client.Connect("127.0.0.1", ProgramConstants.LAN_GAME_LOBBY_PORT);
 
                 byte[] buffer = encoding.GetBytes(PLAYER_JOIN_COMMAND +
-                    ProgramConstants.LAN_DATA_SEPARATOR + ProgramConstants.PLAYERNAME + 
+                    ProgramConstants.LAN_DATA_SEPARATOR + ProgramConstants.PLAYERNAME +
                     ProgramConstants.LAN_DATA_SEPARATOR + loadedGameId);
 
                 this.client.GetStream().Write(buffer, 0, buffer.Length);
@@ -232,7 +232,7 @@ namespace DTAClient.DXGUI.Multiplayer
         private void AddPlayer(LANPlayerInfo lpInfo)
         {
             if (Players.Find(p => p.Name == lpInfo.Name) != null ||
-                Players.Count >= SGPlayers.Count || 
+                Players.Count >= SGPlayers.Count ||
                 SGPlayers.Find(p => p.Name == lpInfo.Name) == null)
             {
                 lpInfo.TcpClient.Close();
@@ -440,7 +440,7 @@ namespace DTAClient.DXGUI.Multiplayer
 
         protected override void SendChatMessage(string message)
         {
-            SendMessageToHost(CHAT_COMMAND + " " + chatColorIndex + 
+            SendMessageToHost(CHAT_COMMAND + " " + chatColorIndex +
                 ProgramConstants.LAN_DATA_SEPARATOR + message);
 
             sndMessageSound.Play();
@@ -460,8 +460,8 @@ namespace DTAClient.DXGUI.Multiplayer
             if (colorIndex < 0 || colorIndex >= chatColors.Length)
                 return;
 
-            BroadcastMessage(CHAT_COMMAND + " " + sender + 
-                ProgramConstants.LAN_DATA_SEPARATOR + colorIndex + 
+            BroadcastMessage(CHAT_COMMAND + " " + sender +
+                ProgramConstants.LAN_DATA_SEPARATOR + colorIndex +
                 ProgramConstants.LAN_DATA_SEPARATOR + data);
         }
 

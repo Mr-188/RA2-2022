@@ -287,6 +287,7 @@
     <Compile Include="CustomSettings\CustomSettingFileDropDown.cs" />
     <Compile Include="CustomSettings\FileSourceDestinationInfo.cs" />
     <Compile Include="CustomSettings\ICustomSetting.cs" />
+    <Compile Include="OptionPanels\LocalSkinPanel.cs" />
     <Compile Include="OptionPanels\AudioOptionsPanel.cs" />
     <Compile Include="OptionPanels\CnCNetOptionsPanel.cs" />
     <Compile Include="OptionPanels\ComponentsPanel.cs" />
@@ -300,6 +301,7 @@
     <Compile Include="DirectDrawWrapper.cs" />
     <Compile Include="OptionPanels\UpdaterOptionsPanel.cs" />
     <Compile Include="OptionPanels\XNAOptionsPanel.cs" />
+    <Compile Include="ThankWindow.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -331,6 +333,10 @@
     <ProjectReference Include="..\ClientGUI\ClientGUI.csproj">
       <Project>{4c26ad04-ff2e-4465-9f40-deb9ddc2c1d6}</Project>
       <Name>ClientGUI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Localization\Localization.csproj">
+      <Project>{2cd114e3-c30f-4a95-9b4a-455c2c8f82e5}</Project>
+      <Name>Localization</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

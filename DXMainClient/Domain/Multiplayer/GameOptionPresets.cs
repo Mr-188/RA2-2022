@@ -3,8 +3,6 @@ using Rampastring.Tools;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DTAClient.Domain.Multiplayer
 {
@@ -119,7 +117,7 @@ namespace DTAClient.Domain.Multiplayer
 
             if (presets.TryGetValue(name, out GameOptionPreset value))
             {
-                
+
                 return value;
             }
 
@@ -131,7 +129,7 @@ namespace DTAClient.Domain.Multiplayer
             LoadIniIfNotInitialized();
 
             return presets.Keys
-                .Where(key  => !string.IsNullOrWhiteSpace(key))
+                .Where(key => !string.IsNullOrWhiteSpace(key))
                 .ToList();
         }
 

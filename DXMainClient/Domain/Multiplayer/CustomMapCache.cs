@@ -1,5 +1,5 @@
-﻿using System.Collections.Concurrent;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using System.Collections.Concurrent;
 
 namespace DTAClient.Domain.Multiplayer
 {
@@ -7,7 +7,7 @@ namespace DTAClient.Domain.Multiplayer
     {
         [JsonProperty("version")]
         public int Version { get; set; }
-        
+
         [JsonProperty("maps")]
         public ConcurrentDictionary<string, Map> Maps { get; set; }
     }

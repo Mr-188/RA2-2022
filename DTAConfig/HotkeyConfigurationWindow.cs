@@ -16,8 +16,8 @@ namespace DTAConfig
     /// </summary>
     public class HotkeyConfigurationWindow : XNAWindow
     {
-        private const string HOTKEY_TIP_TEXT = "Press a key...";
-        private const string HOTKEY_INI_SECTION = "Hotkey";
+        private const string HOTKEY_TIP_TEXT = "按下一个键...";
+        private const string HOTKEY_INI_SECTION = "热键";
         private const string KEYBOARD_COMMANDS_INI = "KeyboardCommands.ini";
 
         public HotkeyConfigurationWindow(WindowManager windowManager) : base(windowManager)
@@ -68,11 +68,11 @@ namespace DTAConfig
             var lblCategory = new XNALabel(WindowManager);
             lblCategory.Name = "lblCategory";
             lblCategory.ClientRectangle = new Rectangle(12, 12, 0, 0);
-            lblCategory.Text = "Category:";
+            lblCategory.Text = "类别:";
 
             ddCategory = new XNAClientDropDown(WindowManager);
             ddCategory.Name = "ddCategory";
-            ddCategory.ClientRectangle = new Rectangle(lblCategory.Right + 12, 
+            ddCategory.ClientRectangle = new Rectangle(lblCategory.Right + 12,
                 lblCategory.Y - 1, 250, ddCategory.Height);
 
             HashSet<string> categories = new HashSet<string>();
@@ -88,12 +88,12 @@ namespace DTAConfig
 
             lbHotkeys = new XNAMultiColumnListBox(WindowManager);
             lbHotkeys.Name = "lbHotkeys";
-            lbHotkeys.ClientRectangle = new Rectangle(12, ddCategory.Bottom + 12, 
+            lbHotkeys.ClientRectangle = new Rectangle(12, ddCategory.Bottom + 12,
                 ddCategory.Right - 12, Height - ddCategory.Bottom - 59);
             lbHotkeys.PanelBackgroundDrawMode = PanelBackgroundImageDrawMode.STRETCHED;
             lbHotkeys.BackgroundTexture = AssetLoader.CreateTexture(new Color(0, 0, 0, 128), 1, 1);
-            lbHotkeys.AddColumn("Command", 150);
-            lbHotkeys.AddColumn("Shortcut", lbHotkeys.Width - 150);
+            lbHotkeys.AddColumn("指令", 150);
+            lbHotkeys.AddColumn("快捷方式", lbHotkeys.Width - 150);
 
             hotkeyInfoPanel = new XNAPanel(WindowManager);
             hotkeyInfoPanel.Name = "HotkeyInfoPanel";
@@ -104,32 +104,32 @@ namespace DTAConfig
             lblCommandCaption.Name = "lblCommandCaption";
             lblCommandCaption.FontIndex = 1;
             lblCommandCaption.ClientRectangle = new Rectangle(12, 12, 0, 0);
-            lblCommandCaption.Text = "Command name";
+            lblCommandCaption.Text = "指令名";
 
             lblDescription = new XNALabel(WindowManager);
             lblDescription.Name = "lblDescription";
             lblDescription.ClientRectangle = new Rectangle(12, lblCommandCaption.Bottom + 12, 0, 0);
-            lblDescription.Text = "Command description";
+            lblDescription.Text = "指令描述";
 
             var lblCurrentHotkey = new XNALabel(WindowManager);
             lblCurrentHotkey.Name = "lblCurrentHotkey";
             lblCurrentHotkey.ClientRectangle = new Rectangle(lblDescription.X,
                 lblDescription.Bottom + 48, 0, 0);
             lblCurrentHotkey.FontIndex = 1;
-            lblCurrentHotkey.Text = "Currently assigned hotkey:";
+            lblCurrentHotkey.Text = "目前分配热键:";
 
             lblCurrentHotkeyValue = new XNALabel(WindowManager);
             lblCurrentHotkeyValue.Name = "lblCurrentHotkeyValue";
             lblCurrentHotkeyValue.ClientRectangle = new Rectangle(lblDescription.X,
                 lblCurrentHotkey.Bottom + 6, 0, 0);
-            lblCurrentHotkeyValue.Text = "Current hotkey value";
+            lblCurrentHotkeyValue.Text = "当前热键值";
 
             var lblNewHotkey = new XNALabel(WindowManager);
             lblNewHotkey.Name = "lblNewHotkey";
             lblNewHotkey.ClientRectangle = new Rectangle(lblDescription.X,
                 lblCurrentHotkeyValue.Bottom + 48, 0, 0);
             lblNewHotkey.FontIndex = 1;
-            lblNewHotkey.Text = "New hotkey:";
+            lblNewHotkey.Text = "新热键:";
 
             lblNewHotkeyValue = new XNALabel(WindowManager);
             lblNewHotkeyValue.Name = "lblNewHotkeyValue";
@@ -141,25 +141,25 @@ namespace DTAConfig
             lblCurrentlyAssignedTo.Name = "lblCurrentlyAssignedTo";
             lblCurrentlyAssignedTo.ClientRectangle = new Rectangle(lblDescription.X,
                 lblNewHotkeyValue.Bottom + 12, 0, 0);
-            lblCurrentlyAssignedTo.Text = "Currently assigned to:\nKey";
+            lblCurrentlyAssignedTo.Text = "目前分配给:\nKey";
 
             var btnAssign = new XNAClientButton(WindowManager);
             btnAssign.Name = "btnAssign";
             btnAssign.ClientRectangle = new Rectangle(lblDescription.X,
                 lblCurrentlyAssignedTo.Bottom + 24, UIDesignConstants.BUTTON_WIDTH_121, UIDesignConstants.BUTTON_HEIGHT);
-            btnAssign.Text = "Assign Hotkey";
+            btnAssign.Text = "分配热键";
             btnAssign.LeftClick += BtnAssign_LeftClick;
 
             btnResetKey = new XNAClientButton(WindowManager);
             btnResetKey.Name = "btnResetKey";
             btnResetKey.ClientRectangle = new Rectangle(btnAssign.X, btnAssign.Bottom + 12, btnAssign.Width, 23);
-            btnResetKey.Text = "Reset to Default";
+            btnResetKey.Text = "重置为默认";
             btnResetKey.LeftClick += BtnReset_LeftClick;
 
             var lblDefaultHotkey = new XNALabel(WindowManager);
             lblDefaultHotkey.Name = "lblOriginalHotkey";
             lblDefaultHotkey.ClientRectangle = new Rectangle(lblCurrentHotkey.X, btnResetKey.Bottom + 12, 0, 0);
-            lblDefaultHotkey.Text = "Default hotkey:";
+            lblDefaultHotkey.Text = "默认热键:";
 
             lblDefaultHotkeyValue = new XNALabel(WindowManager);
             lblDefaultHotkeyValue.Name = "lblDefaultHotkeyValue";
@@ -168,13 +168,13 @@ namespace DTAConfig
             var btnSave = new XNAClientButton(WindowManager);
             btnSave.Name = "btnSave";
             btnSave.ClientRectangle = new Rectangle(12, lbHotkeys.Bottom + 12, UIDesignConstants.BUTTON_WIDTH_92, UIDesignConstants.BUTTON_HEIGHT);
-            btnSave.Text = "Save";
+            btnSave.Text = "保存";
             btnSave.LeftClick += BtnSave_LeftClick;
 
             var btnResetAllKeys = new XNAClientButton(WindowManager);
             btnResetAllKeys.Name = "btnResetAllToDefaults";
             btnResetAllKeys.ClientRectangle = new Rectangle(0, btnSave.Y, UIDesignConstants.BUTTON_WIDTH_121, UIDesignConstants.BUTTON_HEIGHT);
-            btnResetAllKeys.Text = "Reset All Keys";
+            btnResetAllKeys.Text = "重置所有热键";
             btnResetAllKeys.LeftClick += BtnResetToDefaults_LeftClick;
             AddChild(btnResetAllKeys);
             btnResetAllKeys.CenterOnParentHorizontally();
@@ -182,7 +182,7 @@ namespace DTAConfig
             var btnCancel = new XNAClientButton(WindowManager);
             btnCancel.Name = "btnExit";
             btnCancel.ClientRectangle = new Rectangle(Width - 104, btnSave.Y, UIDesignConstants.BUTTON_WIDTH_92, UIDesignConstants.BUTTON_HEIGHT);
-            btnCancel.Text = "Cancel";
+            btnCancel.Text = "取消";
             btnCancel.LeftClick += BtnCancel_LeftClick;
 
             AddChild(lbHotkeys);
@@ -325,7 +325,7 @@ namespace DTAConfig
             hotkeyInfoPanel.Enable();
             var command = (GameCommand)lbHotkeys.GetItem(0, lbHotkeys.SelectedIndex).Tag;
             lblCommandCaption.Text = command.UIName;
-            lblDescription.Text = Renderer.FixText(command.Description, lblDescription.FontIndex, 
+            lblDescription.Text = Renderer.FixText(command.Description, lblDescription.FontIndex,
                 hotkeyInfoPanel.Width - lblDescription.X).Text;
             lblCurrentHotkeyValue.Text = command.Hotkey.ToStringWithNone();
 
@@ -406,7 +406,7 @@ namespace DTAConfig
             foreach (var command in gameCommands)
             {
                 if (pendingHotkey.Equals(command.Hotkey))
-                    lblCurrentlyAssignedTo.Text = "Currently assigned to:" + Environment.NewLine + command.UIName;
+                    lblCurrentlyAssignedTo.Text = "目前分配给:" + Environment.NewLine + command.UIName;
             }
         }
 

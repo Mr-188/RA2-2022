@@ -1,7 +1,7 @@
-﻿using Rampastring.XNAUI.XNAControls;
-using Rampastring.XNAUI;
+﻿using DTAClient.Domain.Multiplayer;
 using Microsoft.Xna.Framework;
-using DTAClient.Domain.Multiplayer;
+using Rampastring.XNAUI;
+using Rampastring.XNAUI.XNAControls;
 
 namespace DTAClient.DXGUI.Multiplayer
 {
@@ -34,7 +34,7 @@ namespace DTAClient.DXGUI.Multiplayer
 
             lblGameInformation = new XNALabel(WindowManager);
             lblGameInformation.FontIndex = 1;
-            lblGameInformation.Text = "GAME INFORMATION";
+            lblGameInformation.Text = "房间信息";
 
             lblGameMode = new XNALabel(WindowManager);
             lblGameMode.ClientRectangle = new Rectangle(6, 30, 0, 0);
@@ -81,7 +81,7 @@ namespace DTAClient.DXGUI.Multiplayer
             AddChild(lblGameInformation);
 
             lblGameInformation.CenterOnParent();
-            lblGameInformation.ClientRectangle = new Rectangle( lblGameInformation.X, 6,
+            lblGameInformation.ClientRectangle = new Rectangle(lblGameInformation.X, 6,
                 lblGameInformation.Width, lblGameInformation.Height);
 
             base.Initialize();
@@ -89,20 +89,20 @@ namespace DTAClient.DXGUI.Multiplayer
 
         public void SetInfo(GenericHostedGame game)
         {
-            lblGameMode.Text = Renderer.GetStringWithLimitedWidth("Game mode: " + Renderer.GetSafeString(game.GameMode, lblGameMode.FontIndex),
+            lblGameMode.Text = Renderer.GetStringWithLimitedWidth("游戏模式: " + Renderer.GetSafeString(game.GameMode, lblGameMode.FontIndex),
                 lblGameMode.FontIndex, Width - lblGameMode.X * 2);
             lblGameMode.Visible = true;
-            lblMap.Text = Renderer.GetStringWithLimitedWidth("Map: " + Renderer.GetSafeString(game.Map, lblMap.FontIndex),
+            lblMap.Text = Renderer.GetStringWithLimitedWidth("地图: " + Renderer.GetSafeString(game.Map, lblMap.FontIndex),
                 lblMap.FontIndex, Width - lblMap.X * 2);
             lblMap.Visible = true;
-            lblGameVersion.Text = "Game version: " + Renderer.GetSafeString(game.GameVersion, lblGameVersion.FontIndex);
+            lblGameVersion.Text = "游戏版本: " + Renderer.GetSafeString(game.GameVersion, lblGameVersion.FontIndex);
             lblGameVersion.Visible = true;
-            lblHost.Text = "Host: " + Renderer.GetSafeString(game.HostName, lblHost.FontIndex);
+            lblHost.Text = "房主: " + Renderer.GetSafeString(game.HostName, lblHost.FontIndex);
             lblHost.Visible = true;
-            lblPing.Text = game.Ping > 0 ? "Ping: " + game.Ping.ToString() + " ms" : "Ping: Unknown";
+            lblPing.Text = game.Ping > 0 ? "延迟: " + game.Ping.ToString() + " ms" : "Ping: Unknown";
             lblPing.Visible = true;
             lblPlayers.Visible = true;
-            lblPlayers.Text = "Players (" + game.Players.Length + " / " + game.MaxPlayers + "):";
+            lblPlayers.Text = "玩家数 (" + game.Players.Length + " / " + game.MaxPlayers + "):";
 
             for (int i = 0; i < game.Players.Length && i < MAX_PLAYERS; i++)
             {

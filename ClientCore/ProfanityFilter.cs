@@ -47,7 +47,7 @@ namespace ClientCore
                 censoredText = Regex.Replace(censoredText, regularExpression, "",
                     RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
 
-                if(string.IsNullOrEmpty(censoredText))
+                if (string.IsNullOrEmpty(censoredText))
                     return true;
             }
             return false;

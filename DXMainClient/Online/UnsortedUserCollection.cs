@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DTAClient.Online
 {
@@ -30,7 +27,7 @@ namespace DTAClient.Online
         public void DoForAllUsers(Action<T> action)
         {
             var values = dictionary.Values;
-            
+
             foreach (T value in values)
             {
                 action(value);

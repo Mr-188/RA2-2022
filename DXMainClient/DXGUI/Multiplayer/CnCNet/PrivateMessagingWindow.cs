@@ -1,19 +1,17 @@
 ﻿using ClientCore;
 using ClientCore.CnCNet5;
+using ClientCore.Enums;
 using ClientGUI;
 using DTAClient.Online;
 using DTAClient.Online.EventArguments;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Rampastring.Tools;
 using Rampastring.XNAUI;
 using Rampastring.XNAUI.XNAControls;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using ClientCore.Enums;
 
 namespace DTAClient.DXGUI.Multiplayer.CnCNet
 {
@@ -26,8 +24,8 @@ namespace DTAClient.DXGUI.Multiplayer.CnCNet
 
         private const int LB_USERS_WIDTH = 150;
 
-        private const string DEFAULT_PLAYERS_TEXT = "PLAYERS:";
-        private const string RECENT_PLAYERS_TEXT = "RECENT PLAYERS:";
+        private const string DEFAULT_PLAYERS_TEXT = "玩家:";
+        private const string RECENT_PLAYERS_TEXT = "最近玩家:";
 
         private CnCNetUserData cncnetUserData;
         private readonly PrivateMessageHandler privateMessageHandler;
@@ -115,7 +113,7 @@ namespace DTAClient.DXGUI.Multiplayer.CnCNet
             lblPrivateMessaging = new XNALabel(WindowManager);
             lblPrivateMessaging.Name = nameof(lblPrivateMessaging);
             lblPrivateMessaging.FontIndex = 1;
-            lblPrivateMessaging.Text = "PRIVATE MESSAGING";
+            lblPrivateMessaging.Text = "私信";
 
             AddChild(lblPrivateMessaging);
             lblPrivateMessaging.CenterOnParent();
@@ -129,10 +127,10 @@ namespace DTAClient.DXGUI.Multiplayer.CnCNet
             tabControl.ClientRectangle = new Rectangle(34, 50, 0, 0);
             tabControl.ClickSound = new EnhancedSoundEffect("button.wav");
             tabControl.FontIndex = 1;
-            tabControl.AddTab("Messages", UIDesignConstants.BUTTON_WIDTH_133);
-            tabControl.AddTab("Friend List", UIDesignConstants.BUTTON_WIDTH_133);
-            tabControl.AddTab("All Players", UIDesignConstants.BUTTON_WIDTH_133);
-            tabControl.AddTab("Recent Players", UIDesignConstants.BUTTON_WIDTH_133);
+            tabControl.AddTab("消息", UIDesignConstants.BUTTON_WIDTH_133);
+            tabControl.AddTab("好友列表", UIDesignConstants.BUTTON_WIDTH_133);
+            tabControl.AddTab("所有玩家", UIDesignConstants.BUTTON_WIDTH_133);
+            tabControl.AddTab("最近玩家", UIDesignConstants.BUTTON_WIDTH_133);
             tabControl.SelectedIndexChanged += TabControl_SelectedIndexChanged;
 
             lblPlayers = new XNALabel(WindowManager);
@@ -157,7 +155,7 @@ namespace DTAClient.DXGUI.Multiplayer.CnCNet
             lblMessages.ClientRectangle = new Rectangle(lbUserList.Right + 12,
                 lblPlayers.Y, 0, 0);
             lblMessages.FontIndex = 1;
-            lblMessages.Text = "MESSAGES:";
+            lblMessages.Text = "消息:";
 
             lbMessages = new ChatListBox(WindowManager);
             lbMessages.Name = nameof(lbMessages);
@@ -258,7 +256,7 @@ namespace DTAClient.DXGUI.Multiplayer.CnCNet
             if (pmUser != null)
             {
                 leaveMessage = new ChatMessage(Color.White,
-                    e.UserName + " is now offline.");
+                    e.UserName + " 现在是离线.");
                 pmUser.Messages.Add(leaveMessage);
             }
 
@@ -307,7 +305,7 @@ namespace DTAClient.DXGUI.Multiplayer.CnCNet
 
             if (pmUser != null)
             {
-                joinMessage = new ChatMessage(e.User.Name + " is now online.");
+                joinMessage = new ChatMessage(e.User.Name + " 现在是离线.");
                 pmUser.Messages.Add(joinMessage);
             }
 
@@ -807,7 +805,7 @@ namespace DTAClient.DXGUI.Multiplayer.CnCNet
 
         public void SwitchOff() => Disable();
 
-        public string GetSwitchName() => "Private Messaging";
+        public string GetSwitchName() => "私信";
 
         /// <summary>
         /// A class for storing a private message in memory.

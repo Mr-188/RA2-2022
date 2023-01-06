@@ -34,7 +34,7 @@ namespace DTAClient.Domain.Multiplayer.CnCNet
 
                 string address = parts[0];
                 string[] detailedAddress = address.Split(new char[] { ':' });
-                
+
                 tunnel.Address = detailedAddress[0];
                 tunnel.Port = int.Parse(detailedAddress[1]);
                 tunnel.Country = parts[1];

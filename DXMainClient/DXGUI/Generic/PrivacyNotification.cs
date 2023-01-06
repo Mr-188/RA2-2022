@@ -26,7 +26,7 @@ namespace DTAClient.DXGUI.Generic
             lblDescription.Name = nameof(lblDescription);
             lblDescription.X = UIDesignConstants.EMPTY_SPACE_SIDES;
             lblDescription.Y = UIDesignConstants.EMPTY_SPACE_TOP;
-            lblDescription.Text = Renderer.FixText("By using the client you agree to the CnCNet Terms & Conditions as well as the CnCNet Privacy Policy. Privacy-related options can be configured in the client options.",
+            lblDescription.Text = Renderer.FixText("使用本客户端即代表您同意<<CnCNet条约和条款>>以及<<CnCNet隐私策略>>.有关隐私的选项可以在客户端的设置中调整",
                 lblDescription.FontIndex, WindowManager.RenderResolutionX - (UIDesignConstants.EMPTY_SPACE_SIDES * 2)).Text;
             AddChild(lblDescription);
 
@@ -34,12 +34,12 @@ namespace DTAClient.DXGUI.Generic
             lblMoreInformation.Name = nameof(lblMoreInformation);
             lblMoreInformation.X = lblDescription.X;
             lblMoreInformation.Y = lblDescription.Bottom + UIDesignConstants.CONTROL_VERTICAL_MARGIN;
-            lblMoreInformation.Text = "More information: ";
+            lblMoreInformation.Text = "更多信息: ";
             AddChild(lblMoreInformation);
 
             var lblTermsAndConditions = new XNALinkLabel(WindowManager);
             lblTermsAndConditions.Name = nameof(lblTermsAndConditions);
-            lblTermsAndConditions.X = lblMoreInformation.Right + UIDesignConstants.CONTROL_HORIZONTAL_MARGIN;
+            ////lblTermsAndConditions.X = lblMoreInformation.Right + UIDesignConstants.CONTROL_HORIZONTAL_MARGIN;
             lblTermsAndConditions.Y = lblMoreInformation.Y;
             lblTermsAndConditions.Text = "https://cncnet.org/terms-and-conditions";
             lblTermsAndConditions.LeftClick += (s, e) => Process.Start(lblTermsAndConditions.Text);
@@ -66,14 +66,14 @@ namespace DTAClient.DXGUI.Generic
             btnOK.Width = 75;
             btnOK.Y = lblExplanation.Y;
             btnOK.X = WindowManager.RenderResolutionX - btnOK.Width - UIDesignConstants.CONTROL_HORIZONTAL_MARGIN;
-            btnOK.Text = "Got it";
+            btnOK.Text = "同意";
             AddChild(btnOK);
-            btnOK.LeftClick += (s, e) => 
+            btnOK.LeftClick += (s, e) =>
             {
                 UserINISettings.Instance.PrivacyPolicyAccepted.Value = true;
                 UserINISettings.Instance.SaveSettings();
                 // AlphaRate = -0.2f;
-                Disable(); 
+                Disable();
             };
 
             Height = btnOK.Bottom + UIDesignConstants.EMPTY_SPACE_BOTTOM;

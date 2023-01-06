@@ -1,0 +1,260 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v6.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v6.0": {
+      "Rampastring.XNAUI.WindowsXNA/1.0.0": {
+        "dependencies": {
+          "Microsoft.SourceLink.GitHub": "1.1.1",
+          "Microsoft.Windows.CsWin32": "0.2.46-beta",
+          "Rampastring.Tools": "2.0.3",
+          "SixLabors.ImageSharp": "2.1.3",
+          "TextCopy": "6.1.0",
+          "Microsoft.Xna.Framework": "4.0.0.0",
+          "Microsoft.Xna.Framework.Game": "4.0.0.0",
+          "Microsoft.Xna.Framework.Graphics": "4.0.0.0"
+        },
+        "runtime": {
+          "Rampastring.XNAUI.WindowsXNA.dll": {}
+        }
+      },
+      "Microsoft.Build.Tasks.Git/1.1.1": {},
+      "Microsoft.Extensions.DependencyInjection.Abstractions/6.0.0": {
+        "runtime": {
+          "lib/net6.0/Microsoft.Extensions.DependencyInjection.Abstractions.dll": {
+            "assemblyVersion": "6.0.0.0",
+            "fileVersion": "6.0.21.52210"
+          }
+        }
+      },
+      "Microsoft.NETCore.Platforms/5.0.0": {},
+      "Microsoft.SourceLink.Common/1.1.1": {},
+      "Microsoft.SourceLink.GitHub/1.1.1": {
+        "dependencies": {
+          "Microsoft.Build.Tasks.Git": "1.1.1",
+          "Microsoft.SourceLink.Common": "1.1.1"
+        }
+      },
+      "Microsoft.Windows.CsWin32/0.2.46-beta": {
+        "dependencies": {
+          "Microsoft.Windows.SDK.Win32Docs": "0.1.7-alpha",
+          "Microsoft.Windows.SDK.Win32Metadata": "31.0.4-preview",
+          "System.Memory": "4.5.4"
+        }
+      },
+      "Microsoft.Windows.SDK.Win32Docs/0.1.7-alpha": {},
+      "Microsoft.Windows.SDK.Win32Metadata/31.0.4-preview": {},
+      "Rampastring.Tools/2.0.3": {
+        "runtime": {
+          "lib/net6.0/Rampastring.Tools.dll": {
+            "assemblyVersion": "2.0.3.0",
+            "fileVersion": "2.0.3.0"
+          }
+        }
+      },
+      "SixLabors.ImageSharp/2.1.3": {
+        "dependencies": {
+          "System.Runtime.CompilerServices.Unsafe": "5.0.0",
+          "System.Text.Encoding.CodePages": "5.0.0"
+        },
+        "runtime": {
+          "lib/netcoreapp3.1/SixLabors.ImageSharp.dll": {
+            "assemblyVersion": "2.0.0.0",
+            "fileVersion": "2.1.3.0"
+          }
+        }
+      },
+      "System.Memory/4.5.4": {},
+      "System.Runtime.CompilerServices.Unsafe/5.0.0": {},
+      "System.Text.Encoding.CodePages/5.0.0": {
+        "dependencies": {
+          "Microsoft.NETCore.Platforms": "5.0.0"
+        }
+      },
+      "TextCopy/6.1.0": {
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "6.0.0"
+        },
+        "runtime": {
+          "lib/net6.0/TextCopy.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "Microsoft.Xna.Framework/4.0.0.0": {
+        "runtime": {
+          "Microsoft.Xna.Framework.dll": {
+            "assemblyVersion": "4.0.0.0",
+            "fileVersion": "4.0.30901.0"
+          }
+        }
+      },
+      "Microsoft.Xna.Framework.Game/4.0.0.0": {
+        "runtime": {
+          "Microsoft.Xna.Framework.Game.dll": {
+            "assemblyVersion": "4.0.0.0",
+            "fileVersion": "4.0.30901.0"
+          }
+        }
+      },
+      "Microsoft.Xna.Framework.Graphics/4.0.0.0": {
+        "runtime": {
+          "Microsoft.Xna.Framework.Graphics.dll": {
+            "assemblyVersion": "4.0.0.0",
+            "fileVersion": "4.0.30901.0"
+          }
+        }
+      },
+      "Microsoft.Xna.Framework.GamerServices/4.0.0.0": {
+        "runtime": {
+          "Microsoft.Xna.Framework.GamerServices.dll": {
+            "assemblyVersion": "4.0.0.0",
+            "fileVersion": "4.0.30901.0"
+          }
+        }
+      },
+      "Microsoft.Xna.Framework.Input.Touch/4.0.0.0": {
+        "runtime": {
+          "Microsoft.Xna.Framework.Input.Touch.dll": {
+            "assemblyVersion": "4.0.0.0",
+            "fileVersion": "4.0.30901.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Rampastring.XNAUI.WindowsXNA/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Microsoft.Build.Tasks.Git/1.1.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-AT3HlgTjsqHnWpBHSNeR0KxbLZD7bztlZVj7I8vgeYG9SYqbeFGh0TM/KVtC6fg53nrWHl3VfZFvb5BiQFcY6Q==",
+      "path": "microsoft.build.tasks.git/1.1.1",
+      "hashPath": "microsoft.build.tasks.git.1.1.1.nupkg.sha512"
+    },
+    "Microsoft.Extensions.DependencyInjection.Abstractions/6.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-xlzi2IYREJH3/m6+lUrQlujzX8wDitm4QGnUu6kUXTQAWPuZY8i+ticFJbzfqaetLA6KR/rO6Ew/HuYD+bxifg==",
+      "path": "microsoft.extensions.dependencyinjection.abstractions/6.0.0",
+      "hashPath": "microsoft.extensions.dependencyinjection.abstractions.6.0.0.nupkg.sha512"
+    },
+    "Microsoft.NETCore.Platforms/5.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-VyPlqzH2wavqquTcYpkIIAQ6WdenuKoFN0BdYBbCWsclXacSOHNQn66Gt4z5NBqEYW0FAPm5rlvki9ZiCij5xQ==",
+      "path": "microsoft.netcore.platforms/5.0.0",
+      "hashPath": "microsoft.netcore.platforms.5.0.0.nupkg.sha512"
+    },
+    "Microsoft.SourceLink.Common/1.1.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-WMcGpWKrmJmzrNeuaEb23bEMnbtR/vLmvZtkAP5qWu7vQsY59GqfRJd65sFpBszbd2k/bQ8cs8eWawQKAabkVg==",
+      "path": "microsoft.sourcelink.common/1.1.1",
+      "hashPath": "microsoft.sourcelink.common.1.1.1.nupkg.sha512"
+    },
+    "Microsoft.SourceLink.GitHub/1.1.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-IaJGnOv/M7UQjRJks7B6p7pbPnOwisYGOIzqCz5ilGFTApZ3ktOR+6zJ12ZRPInulBmdAf1SrGdDG2MU8g6XTw==",
+      "path": "microsoft.sourcelink.github/1.1.1",
+      "hashPath": "microsoft.sourcelink.github.1.1.1.nupkg.sha512"
+    },
+    "Microsoft.Windows.CsWin32/0.2.46-beta": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-8rR7x5zmcBo5a2NDWkIS4CQMO2lXDBWduiW3moI1J+JNJSjiQoOrB8GHox+bmkrlsPqoj3WE0UT7RYrVgtUdWg==",
+      "path": "microsoft.windows.cswin32/0.2.46-beta",
+      "hashPath": "microsoft.windows.cswin32.0.2.46-beta.nupkg.sha512"
+    },
+    "Microsoft.Windows.SDK.Win32Docs/0.1.7-alpha": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-+8ygOfBME88Sq75zMopFfqCdxBxZoKDlizPK6iYxzSGf6j51rd9ISNJ20UKfOSr746tgn9GNyVI+jc0JXfnuZA==",
+      "path": "microsoft.windows.sdk.win32docs/0.1.7-alpha",
+      "hashPath": "microsoft.windows.sdk.win32docs.0.1.7-alpha.nupkg.sha512"
+    },
+    "Microsoft.Windows.SDK.Win32Metadata/31.0.4-preview": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-znVHWhpk3X/dRHokwQf3SzS5Qu34RgsBx/SiL0xMHjI8ealA3GDmumD0dSpSidJXgtc2EvAmhLoLmTQwjYZvEA==",
+      "path": "microsoft.windows.sdk.win32metadata/31.0.4-preview",
+      "hashPath": "microsoft.windows.sdk.win32metadata.31.0.4-preview.nupkg.sha512"
+    },
+    "Rampastring.Tools/2.0.3": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-CvPo6akaHEJNKS8D5Ux8MXEHBKBwVnhcSwGpNEgYISnuDV9mlhJI4jsZKe7pRY5hGWukPMXZlB0B03hRjVppWg==",
+      "path": "rampastring.tools/2.0.3",
+      "hashPath": "rampastring.tools.2.0.3.nupkg.sha512"
+    },
+    "SixLabors.ImageSharp/2.1.3": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-8yonNRWX3vUE9k29ta0Hbfa0AEc0hbDjSH/nZ3vOTJEXmY6hLnGsjDKoz96Z+AgOsrdkAu6PdL/Ebaf70aitzw==",
+      "path": "sixlabors.imagesharp/2.1.3",
+      "hashPath": "sixlabors.imagesharp.2.1.3.nupkg.sha512"
+    },
+    "System.Memory/4.5.4": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-1MbJTHS1lZ4bS4FmsJjnuGJOu88ZzTT2rLvrhW7Ygic+pC0NWA+3hgAen0HRdsocuQXCkUTdFn9yHJJhsijDXw==",
+      "path": "system.memory/4.5.4",
+      "hashPath": "system.memory.4.5.4.nupkg.sha512"
+    },
+    "System.Runtime.CompilerServices.Unsafe/5.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-ZD9TMpsmYJLrxbbmdvhwt9YEgG5WntEnZ/d1eH8JBX9LBp+Ju8BSBhUGbZMNVHHomWo2KVImJhTDl2hIgw/6MA==",
+      "path": "system.runtime.compilerservices.unsafe/5.0.0",
+      "hashPath": "system.runtime.compilerservices.unsafe.5.0.0.nupkg.sha512"
+    },
+    "System.Text.Encoding.CodePages/5.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-NyscU59xX6Uo91qvhOs2Ccho3AR2TnZPomo1Z0K6YpyztBPM/A5VbkzOO19sy3A3i1TtEnTxA7bCe3Us+r5MWg==",
+      "path": "system.text.encoding.codepages/5.0.0",
+      "hashPath": "system.text.encoding.codepages.5.0.0.nupkg.sha512"
+    },
+    "TextCopy/6.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-7CxK3AOMTvACGGpRz9ZSVt0k+Ohx9tSPxGtauYKh8IdjTGZ7XzclyQh3m94E5Zk3pvWbZ3j/HjHpSHCuRUtDjA==",
+      "path": "textcopy/6.1.0",
+      "hashPath": "textcopy.6.1.0.nupkg.sha512"
+    },
+    "Microsoft.Xna.Framework/4.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Microsoft.Xna.Framework.Game/4.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Microsoft.Xna.Framework.Graphics/4.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Microsoft.Xna.Framework.GamerServices/4.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Microsoft.Xna.Framework.Input.Touch/4.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

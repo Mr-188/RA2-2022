@@ -1,8 +1,8 @@
 ﻿using ClientGUI;
-using System;
+using Microsoft.Xna.Framework;
 using Rampastring.XNAUI;
 using Rampastring.XNAUI.XNAControls;
-using Microsoft.Xna.Framework;
+using System;
 
 namespace DTAClient.DXGUI.Generic
 {
@@ -29,10 +29,10 @@ namespace DTAClient.DXGUI.Generic
             var lblDescription = new XNALabel(WindowManager);
             lblDescription.Name = "lblDescription";
             lblDescription.ClientRectangle = new Rectangle(12, 40, 0, 0);
-            lblDescription.Text = "Modified game files have been detected. They could affect" + Environment.NewLine + 
-                "the game experience." +
+            lblDescription.Text = "检测到游戏文件被修改. They could affect" + Environment.NewLine +
+                "它们可能会影响到游戏." +
                 Environment.NewLine + Environment.NewLine +
-                "Do you really lack the skill for winning the mission without" + Environment.NewLine + "cheating?";
+                "如果觉得游戏过难,可以尝试简单难度或去网上寻找攻略.";
 
             var imagePanel = new XNAPanel(WindowManager);
             imagePanel.Name = "imagePanel";
@@ -46,14 +46,14 @@ namespace DTAClient.DXGUI.Generic
             btnCancel.Name = "btnCancel";
             btnCancel.ClientRectangle = new Rectangle(Width - 104,
                 Height - 35, UIDesignConstants.BUTTON_WIDTH_92, UIDesignConstants.BUTTON_HEIGHT);
-            btnCancel.Text = "Cancel";
+            btnCancel.Text = "取消";
             btnCancel.LeftClick += BtnCancel_LeftClick;
 
             var btnYes = new XNAClientButton(WindowManager);
             btnYes.Name = "btnYes";
             btnYes.ClientRectangle = new Rectangle(12, btnCancel.Y,
                 btnCancel.Width, btnCancel.Height);
-            btnYes.Text = "Yes";
+            btnYes.Text = "是";
             btnYes.LeftClick += BtnYes_LeftClick;
 
             AddChild(lblCheater);

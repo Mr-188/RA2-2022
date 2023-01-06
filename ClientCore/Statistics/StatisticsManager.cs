@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Rampastring.Tools;
+using System;
 using System.Collections.Generic;
-using System.Text;
 using System.IO;
 using System.Linq;
-using Rampastring.Tools;
+using System.Text;
 
 namespace ClientCore.Statistics
 {
@@ -550,7 +550,7 @@ namespace ClientCore.Statistics
             // Filter out unfitting games
             foreach (MatchStatistics ms in Statistics)
             {
-                if (ms.SawCompletion && 
+                if (ms.SawCompletion &&
                     ms.IsValidForStar &&
                     ms.MapName == mapName &&
                     ms.Players.Count == requiredPlayerCount &&

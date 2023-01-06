@@ -10,7 +10,10 @@ using DTAClient.DXGUI.Multiplayer.GameLobby;
 using DTAClient.Online;
 using DTAConfig;
 using Microsoft.Xna.Framework;
+using Rampastring.Tools;
 using Rampastring.XNAUI;
+using System;
+using System.IO;
 using System.Threading.Tasks;
 using Updater;
 using SkirmishLobby = DTAClient.DXGUI.Multiplayer.GameLobby.SkirmishLobby;
@@ -37,10 +40,21 @@ namespace DTAClient.DXGUI.Generic
 
         public override void Initialize()
         {
-            ClientRectangle = new Rectangle(0, 0, 800, 600);
+            Logger.Log(ClientConfiguration.Instance.GetThemePath(UserINISettings.Instance.ClientTheme));
+            ClientRectangle = new Rectangle(0, 0, 1400, 800);
             Name = "LoadingScreen";
-
-            BackgroundTexture = AssetLoader.LoadTexture("loadingscreen.png");
+            string[] Wallpaper = Directory.GetFiles("Resources/"+ClientConfiguration.Instance.GetThemePath(UserINISettings.Instance.ClientTheme)+"Wallpaper");
+            if (UserINISettings.Instance.Random_wallpaper)
+            {
+                Random ran = new Random();
+                int i = ran.Next(0,Wallpaper.Length);
+                BackgroundTexture = AssetLoader.LoadTexture(Wallpaper[i]);
+                
+            }
+            else
+            {
+                BackgroundTexture = AssetLoader.LoadTexture(Wallpaper[0]);
+            }
 
             base.Initialize();
 
@@ -77,7 +91,7 @@ namespace DTAClient.DXGUI.Generic
 
         private void Finish()
         {
-            ProgramConstants.GAME_VERSION = ClientConfiguration.Instance.ModMode ? 
+            ProgramConstants.GAME_VERSION = ClientConfiguration.Instance.ModMode ?
                 "N/A" : CUpdater.GameVersion;
 
             DiscordHandler discordHandler = null;
@@ -93,7 +107,7 @@ namespace DTAClient.DXGUI.Generic
             var cncnetManager = new CnCNetManager(WindowManager, gameCollection, cncnetUserData);
             var tunnelHandler = new TunnelHandler(WindowManager, cncnetManager);
             var privateMessageHandler = new PrivateMessageHandler(cncnetManager, cncnetUserData);
-            
+
             var topBar = new TopBar(WindowManager, cncnetManager, privateMessageHandler);
 
             var optionsWindow = new OptionsWindow(WindowManager, gameCollection, topBar);
@@ -104,9 +118,9 @@ namespace DTAClient.DXGUI.Generic
 
             var cncnetGameLobby = new CnCNetGameLobby(WindowManager,
                 "MultiplayerGameLobby", topBar, cncnetManager, tunnelHandler, gameCollection, cncnetUserData, mapLoader, discordHandler, pmWindow);
-            var cncnetGameLoadingLobby = new CnCNetGameLoadingLobby(WindowManager, 
+            var cncnetGameLoadingLobby = new CnCNetGameLoadingLobby(WindowManager,
                 topBar, cncnetManager, tunnelHandler, mapLoader.GameModes, gameCollection, discordHandler);
-            var cncnetLobby = new CnCNetLobby(WindowManager, cncnetManager, 
+            var cncnetLobby = new CnCNetLobby(WindowManager, cncnetManager,
                 cncnetGameLobby, cncnetGameLoadingLobby, topBar, pmWindow, tunnelHandler,
                 gameCollection, cncnetUserData, optionsWindow);
             var gipw = new GameInProgressWindow(WindowManager);

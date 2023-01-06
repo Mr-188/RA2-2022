@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
-using Rampastring.XNAUI;
+﻿using ClientCore.Properties;
 using Microsoft.Xna.Framework.Graphics;
-using ClientCore.Properties;
-using System.Linq;
-using System;
 using Rampastring.Tools;
+using Rampastring.XNAUI;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ClientCore.CnCNet5
 {

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+
 namespace ClientGUI
 {
     public class XNAWindowBase : XNAPanel
@@ -84,5 +85,7 @@ namespace ClientGUI
             AddChild(control);
             return control;
         }
+
+
     }
 }

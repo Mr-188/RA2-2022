@@ -1,4 +1,5 @@
 ﻿using ClientCore;
+using Localization;
 using Rampastring.Tools;
 using System;
 using System.Collections.Generic;
@@ -54,6 +55,8 @@ namespace DTAClient.Domain.Multiplayer
         /// </summary>
         public List<int> DisallowedPlayerSides = new List<int>();
 
+        public List<int> DisallowedPlayerStarts = new List<int>();
+
         /// </summary>
         /// Override for minimum amount of players needed to play any map in this game mode.
         /// </summary>
@@ -77,7 +80,10 @@ namespace DTAClient.Domain.Multiplayer
             IniFile forcedOptionsIni = new IniFile(ProgramConstants.GamePath + ClientConfiguration.Instance.MPMapsIniPath);
 
             CoopDifficultyLevel = forcedOptionsIni.GetIntValue(Name, "CoopDifficultyLevel", 0);
-            UIName = forcedOptionsIni.GetStringValue(Name, "UIName", Name);
+
+            UIName = forcedOptionsIni.GetStringValue(Name, "UIName", Name).L10N($"UI:GameMode:{Name}");
+
+            //Logger.Log("UI:GameMode:Standard".L10N()
             MultiplayerOnly = forcedOptionsIni.GetBooleanValue(Name, "MultiplayerOnly", false);
             HumanPlayersOnly = forcedOptionsIni.GetBooleanValue(Name, "HumanPlayersOnly", false);
             ForceRandomStartLocations = forcedOptionsIni.GetBooleanValue(Name, "ForceRandomStartLocations", false);
@@ -92,6 +98,13 @@ namespace DTAClient.Domain.Multiplayer
 
             foreach (string sideIndex in disallowedSides)
                 DisallowedPlayerSides.Add(int.Parse(sideIndex));
+
+            string[] disallowedStarts = forcedOptionsIni
+                .GetStringValue(Name, "DisallowedPlayerStarts", string.Empty)
+                .Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+
+            foreach (string startIndex in disallowedStarts)
+                DisallowedPlayerStarts.Add(int.Parse(startIndex));
 
             ParseForcedOptions(forcedOptionsIni);
 
@@ -135,7 +148,7 @@ namespace DTAClient.Domain.Multiplayer
 
             foreach (string key in spawnIniKeys)
             {
-                ForcedSpawnIniOptions.Add(new KeyValuePair<string, string>(key, 
+                ForcedSpawnIniOptions.Add(new KeyValuePair<string, string>(key,
                     forcedOptionsIni.GetStringValue(section, key, string.Empty)));
             }
         }

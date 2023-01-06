@@ -77,7 +77,7 @@ namespace ClientCore
         public const string GAME_INVITATION_FAILED_CTCP_COMMAND = "INVITATION_FAILED";
 
         public static readonly List<string> TEAMS = new List<string> { "A", "B", "C", "D" };
-        public static readonly List<string> AI_PLAYER_NAMES = new List<string> { "Easy AI", "Medium AI", "Hard AI" };
+        public static readonly List<string> AI_PLAYER_NAMES = new List<string> { "简单的电脑", "普通的电脑", "困难的电脑" };
         
     }
 }

@@ -14,6 +14,7 @@ using Rampastring.XNAUI;
 using Rampastring.XNAUI.XNAControls;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace DTAClient.DXGUI.Multiplayer.CnCNet
@@ -91,7 +92,7 @@ namespace DTAClient.DXGUI.Multiplayer.CnCNet
         private DarkeningPanel dp;
 
         private TopBar topBar;
-        
+
         public override void Initialize()
         {
             dp = new DarkeningPanel(WindowManager);
@@ -121,7 +122,7 @@ namespace DTAClient.DXGUI.Multiplayer.CnCNet
             btnChangeTunnel.Name = nameof(btnChangeTunnel);
             btnChangeTunnel.ClientRectangle = new Rectangle(btnLeaveGame.Right - btnLeaveGame.Width - 145,
                 btnLeaveGame.Y, UIDesignConstants.BUTTON_WIDTH_133, UIDesignConstants.BUTTON_HEIGHT);
-            btnChangeTunnel.Text = "Change Tunnel";
+            btnChangeTunnel.Text = "更改服务器";
             btnChangeTunnel.LeftClick += BtnChangeTunnel_LeftClick;
             AddChild(btnChangeTunnel);
 
@@ -145,7 +146,7 @@ namespace DTAClient.DXGUI.Multiplayer.CnCNet
         /// <summary>
         /// Sets up events and information before joining the channel.
         /// </summary>
-        public void SetUp(bool isHost, CnCNetTunnel tunnel, Channel channel, 
+        public void SetUp(bool isHost, CnCNetTunnel tunnel, Channel channel,
             string hostName)
         {
             this.channel = channel;
@@ -324,7 +325,7 @@ namespace DTAClient.DXGUI.Multiplayer.CnCNet
                 return;
 
             //if (Players.Count > 0)
-                Players[0].Ready = true;
+            Players[0].Ready = true;
 
             StringBuilder message = new StringBuilder(OPTIONS_CTCP_COMMAND + " ");
             message.Append(ddSavedGame.SelectedIndex);
@@ -348,7 +349,7 @@ namespace DTAClient.DXGUI.Multiplayer.CnCNet
             channel.SendChatMessage(message, chatColor);
         }
 
-        protected override void RequestReadyStatus() => 
+        protected override void RequestReadyStatus() =>
             channel.SendCTCPMessage(PLAYER_READY_CTCP_COMMAND + " 1", QueuedMessageType.GAME_PLAYERS_READY_STATUS_MESSAGE, 10);
 
         protected override void GetReadyNotification()
@@ -426,7 +427,7 @@ namespace DTAClient.DXGUI.Multiplayer.CnCNet
             if (sender != hostName)
                 return;
 
-            AddNotice(cheaterName + " - modified files detected! They could be cheating!", Color.Red);
+            AddNotice(cheaterName + " - 修改了文件!他们可能在作弊!", Color.Red);
 
             if (IsHost)
                 channel.SendCTCPMessage(INVALID_FILE_HASH_CTCP_COMMAND + " " + cheaterName, QueuedMessageType.SYSTEM_MESSAGE, 0);
@@ -569,9 +570,8 @@ namespace DTAClient.DXGUI.Multiplayer.CnCNet
             CnCNetTunnel tunnel = tunnelHandler.Tunnels.Find(t => t.Address == tunnelAddress && t.Port == tunnelPort);
             if (tunnel == null)
             {
-                AddNotice("The game host has selected an invalid tunnel server! " +
-                    "The game host needs to change the server or you will be unable " +
-                    "to participate in the match.",
+                AddNotice("房主选择了无效的服务器! " +
+                    "房主需要更改服务器，否则将无法进行游戏 ",
                     Color.Yellow);
                 btnLoadGame.AllowClick = false;
                 return;
@@ -588,7 +588,7 @@ namespace DTAClient.DXGUI.Multiplayer.CnCNet
         private void HandleTunnelServerChange(CnCNetTunnel tunnel)
         {
             tunnelHandler.CurrentTunnel = tunnel;
-            AddNotice($"The game host has changed the tunnel server to: {tunnel.Name}");
+            AddNotice($"房主已将服务器更改为: {tunnel.Name}");
             //UpdatePing();
         }
 
@@ -596,7 +596,7 @@ namespace DTAClient.DXGUI.Multiplayer.CnCNet
 
         protected override void HostStartGame()
         {
-            AddNotice("Contacting tunnel server...");
+            AddNotice("正在连接服务器...");
             List<int> playerPorts = tunnelHandler.CurrentTunnel.GetPlayerPortInfo(SGPlayers.Count);
 
             if (playerPorts.Count < Players.Count)
@@ -622,13 +622,51 @@ namespace DTAClient.DXGUI.Multiplayer.CnCNet
             sb.Remove(sb.Length - 1, 1);
             channel.SendCTCPMessage(sb.ToString(), QueuedMessageType.SYSTEM_MESSAGE, 9);
 
-            AddNotice("Starting game...");
+            AddNotice("开始游戏...");
 
             started = true;
 
             LoadGame();
+
+            
         }
 
+        private void DelFile(List<string> deleteFile)
+        {
+            //  string resultDirectory = Environment.CurrentDirectory;//目录
+
+            if (deleteFile != null)
+            {
+                for (int i = 0; i < deleteFile.Count; i++)
+                {
+                    try
+                    {
+                        File.Delete(deleteFile[i]);
+                    }
+                    catch
+                    {
+                        continue;
+                    }
+                }
+            }
+        }
+        private void CopyDirectory(string sourceDirPath, string saveDirPath)
+        {
+            if (sourceDirPath != null)
+            {
+
+                if (!Directory.Exists(saveDirPath))
+                {
+                    Directory.CreateDirectory(saveDirPath);
+                }
+                string[] files = Directory.GetFiles(sourceDirPath);
+                foreach (string file in files)
+                {
+                    string pFilePath = saveDirPath + "\\" + Path.GetFileName(file);
+                    File.Copy(file, pFilePath, true);
+                }
+            }
+        }
         protected override void WriteSpawnIniAdditions(IniFile spawnIni)
         {
             spawnIni.SetStringValue("Tunnel", "Ip", tunnelHandler.CurrentTunnel.Address);

@@ -994,7 +994,7 @@ namespace DTAClient.Online
                 var previousMessageIndex = MessageQueue.FindIndex(m => m.MessageType == qm.MessageType);
                 if (previousMessageIndex == -1)
                     return false;
-                
+
                 MessageQueue[previousMessageIndex] = qm;
                 return true;
             }

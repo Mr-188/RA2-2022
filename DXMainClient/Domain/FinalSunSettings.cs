@@ -1,6 +1,6 @@
-﻿using System.IO;
+﻿using ClientCore;
 using Rampastring.Tools;
-using ClientCore;
+using System.IO;
 
 namespace DTAClient.Domain
 {
@@ -25,7 +25,7 @@ namespace DTAClient.Domain
                     iniFile.FileName = ProgramConstants.GamePath + finalSunIniPath;
                     iniFile.Encoding = System.Text.Encoding.Default;
                     iniFile.Parse();
-                    
+
                     iniFile.SetStringValue("FinalSun", "Language", "English");
                     iniFile.SetStringValue("FinalSun", "FileSearchLikeTS", "yes");
                     iniFile.SetStringValue("TS", "Exe", ProgramConstants.GamePath.Replace('/', '\\'));

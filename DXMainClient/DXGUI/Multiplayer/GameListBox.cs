@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using ClientCore;
+﻿using ClientCore;
 using ClientCore.Enums;
 using DTAClient.Domain.Multiplayer;
-using DTAClient.Domain.Multiplayer.CnCNet;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Rampastring.XNAUI;
 using Rampastring.XNAUI.XNAControls;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace DTAClient.DXGUI.Multiplayer
 {
@@ -80,7 +79,7 @@ namespace DTAClient.DXGUI.Multiplayer
 
             return referencedGame.Equals(listedGame);
         };
-        
+
         /// <summary>
         /// Refreshes game information in the game list box.
         /// </summary>
@@ -88,7 +87,7 @@ namespace DTAClient.DXGUI.Multiplayer
         {
             var selectedItem = SelectedItem;
             var hoveredItem = HoveredItem;
-            
+
             Items.Clear();
 
             GetSortedAndFilteredGames()
@@ -129,7 +128,7 @@ namespace DTAClient.DXGUI.Multiplayer
                     .ThenBy(hg => string.Equals(hg.Game.InternalName, localGameIdentifier, StringComparison.CurrentCultureIgnoreCase))
                     .ThenBy(hg => hg.GameVersion != ProgramConstants.GAME_VERSION)
                     .ThenBy(hg => hg.Passworded);
-            
+
             switch ((SortDirection)UserINISettings.Instance.SortState.Value)
             {
                 case SortDirection.Asc:
@@ -222,9 +221,9 @@ namespace DTAClient.DXGUI.Multiplayer
         private void AddGameToList(GenericHostedGame hg)
         {
             int lgTextWidth = hg.IsLoadedGame ? loadedGameTextWidth : 0;
-            int maxTextWidth = Width - hg.Game.Texture.Width - 
+            int maxTextWidth = Width - hg.Game.Texture.Width -
                 (hg.Incompatible ? txIncompatibleGame.Width : 0) -
-                (hg.Locked ? txLockedGame.Width : 0) - (hg.Passworded ? txPasswordedGame.Width : 0) - 
+                (hg.Locked ? txLockedGame.Width : 0) - (hg.Passworded ? txPasswordedGame.Width : 0) -
                 (ICON_MARGIN * 3) - GetScrollBarWidth() - lgTextWidth;
 
             var lbItem = new XNAListBoxItem();

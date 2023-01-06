@@ -1,13 +1,14 @@
-﻿using System;
-using System.Windows.Forms;
+﻿using ClientCore;
+using DTAClient.Domain;
+using Localization;
+using Rampastring.Tools;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using DTAClient.Domain;
-using Rampastring.Tools;
-using ClientCore;
 using System.Security.AccessControl;
 using System.Security.Principal;
-using System.Collections.Generic;
+using System.Windows.Forms;
 
 namespace DTAClient
 {
@@ -29,7 +30,7 @@ namespace DTAClient
         public List<string> UnknownStartupParams { get; }
     }
 
-    static class PreStartup
+        static class PreStartup
     {
         /// <summary>
         /// Initializes various basic systems like the client's logger, 
@@ -72,6 +73,49 @@ namespace DTAClient
             Logger.Log("Loading settings.");
 
             UserINISettings.Initialize(ClientConfiguration.Instance.SettingsIniName);
+
+            
+
+             
+            // Try to load translations
+
+            try
+            {
+                var translation = TranslationTable.LoadFromIniFile(ClientConfiguration.Instance.GetLanguagePath(UserINISettings.Instance.Language) + "Translation.ini");
+
+                TranslationTable.Instance = translation;
+                Logger.Log("Load translation: " + translation.LanguageName);
+            }
+            catch (Exception ex)
+            {
+                TranslationTable.Instance = new TranslationTable();
+            }
+
+            try
+            {
+                if (ClientConfiguration.Instance.GenerateTranslationStub)
+                {
+                    string stubPath = "Client/Translation.stub.ini";
+                    var stubTable = TranslationTable.Instance.Clone();
+                    TranslationTable.Instance.MissingTranslationEvent += (sender, e) =>
+                    {
+                        stubTable.Table.Add(e.Label, e.DefaultValue);
+                    };
+
+                    AppDomain.CurrentDomain.ProcessExit += (sender, e) =>
+                    {
+                        Logger.Log("Writing the translation stub file.");
+                        var ini = stubTable.SaveIni();
+                        ini.WriteIniFile(stubPath);
+                    };
+
+                    Logger.Log("Generating translation stub feature is now enabled. The stub file will be written when the client exits.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Log("Failed to generate the translation stub. " + ex.Message);
+            }
 
             // Delete obsolete files from old target project versions
 
@@ -126,15 +170,16 @@ namespace DTAClient
             }
             catch { }
 
-            MessageBox.Show(string.Format("{0} has crashed. Error message:" + Environment.NewLine + Environment.NewLine +
+            MessageBox.Show(string.Format("{0} has crashed. Error message:".L10N("UI:Main:FatalErrorText1") + Environment.NewLine + Environment.NewLine +
                 ex.Message + Environment.NewLine + Environment.NewLine + (crashLogCopied ?
-                "A crash log has been saved to the following file: " + Environment.NewLine + Environment.NewLine +
+                "A crash log has been saved to the following file:".L10N("UI:Main:FatalErrorText2") + " " + Environment.NewLine + Environment.NewLine +
                 errorLogPath + Environment.NewLine + Environment.NewLine : "") +
-                "If the issue is repeatable, contact the {1} staff at {2}" + (crashLogCopied ? "and provide the crash log file" : "") + ".",
+                (crashLogCopied ? "If the issue is repeatable, contact the {1} staff at {2} and provide the crash log file.".L10N("UI:Main:FatalErrorText3") :
+                "If the issue is repeatable, contact the {1} staff at {2}.".L10N("UI:Main:FatalErrorText4")),
                 MainClientConstants.GAME_NAME_LONG,
                 MainClientConstants.GAME_NAME_SHORT,
                 MainClientConstants.SUPPORT_URL_SHORT),
-                "KABOOOOOOOM", MessageBoxButtons.OK);
+                "KABOOOOOOOM".L10N("UI:Main:FatalErrorTitle"), MessageBoxButtons.OK);
         }
 
         private static void CheckPermissions()
@@ -142,11 +187,11 @@ namespace DTAClient
             if (UserHasDirectoryAccessRights(Environment.CurrentDirectory, FileSystemRights.Modify))
                 return;
 
-            DialogResult dr = MessageBox.Show(string.Format("You seem to be running {0} from a write-protected directory." + Environment.NewLine + Environment.NewLine +
+            DialogResult dr = MessageBox.Show(string.Format(("You seem to be running {0} from a write-protected directory." + Environment.NewLine + Environment.NewLine +
                 "For {1} to function properly when run from a write-protected directory, it needs administrative priveleges." + Environment.NewLine + Environment.NewLine +
                 "Would you like to restart the client with administrative rights?" + Environment.NewLine + Environment.NewLine +
-                "Please also make sure that your security software isn't blocking {1}.", MainClientConstants.GAME_NAME_LONG, MainClientConstants.GAME_NAME_SHORT),
-                "Administrative priveleges required", MessageBoxButtons.YesNo);
+                "Please also make sure that your security software isn't blocking {1}.").L10N("UI:Main:AdminRequiredText"), MainClientConstants.GAME_NAME_LONG, MainClientConstants.GAME_NAME_SHORT),
+                "Administrative priveleges required".L10N("UI:Main:AdminRequiredTitle"), MessageBoxButtons.YesNo);
 
             if (dr == DialogResult.No)
                 Environment.Exit(0);
@@ -157,14 +202,13 @@ namespace DTAClient
             Process.Start(psInfo);
             Environment.Exit(0);
         }
-
-        /// <summary>
-        /// Checks whether the client has specific file system rights to a directory.
-        /// See ssds's answer at https://stackoverflow.com/questions/1410127/c-sharp-test-if-user-has-write-access-to-a-folder
-        /// </summary>
-        /// <param name="path">The path to the directory.</param>
-        /// <param name="accessRights">The file system rights.</param>
-        private static bool UserHasDirectoryAccessRights(string path, FileSystemRights accessRights)
+            /// <summary>
+            /// Checks whether the client has specific file system rights to a directory.
+            /// See ssds's answer at https://stackoverflow.com/questions/1410127/c-sharp-test-if-user-has-write-access-to-a-folder
+            /// </summary>
+            /// <param name="path">The path to the directory.</param>
+            /// <param name="accessRights">The file system rights.</param>
+            private static bool UserHasDirectoryAccessRights(string path, FileSystemRights accessRights)
         {
 #if WINDOWSGL
             // Mono doesn't implement everything necessary for the below to work,

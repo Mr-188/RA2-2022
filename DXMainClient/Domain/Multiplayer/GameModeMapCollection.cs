@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using ClientCore;
+using System.Collections.Generic;
 using System.Linq;
-using ClientCore;
 
 namespace DTAClient.Domain.Multiplayer
 {

@@ -1,5 +1,4 @@
-﻿using ClientCore;
-using ClientGUI;
+﻿using ClientGUI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Rampastring.XNAUI;
@@ -82,14 +81,14 @@ namespace DTAClient.DXGUI.Multiplayer.CnCNet
             affirmativeButton = new XNAClientButton(WindowManager);
             affirmativeButton.ClientRectangle = new Rectangle(ClientRectangle.Left + 8, lblChoiceText.Bottom + 6, 75, 23);
             affirmativeButton.Name = nameof(affirmativeButton);
-            affirmativeButton.Text = "Yes";
+            affirmativeButton.Text = "是";
             affirmativeButton.LeftClick += AffirmativeButton_LeftClick;
             AddChild(affirmativeButton);
 
             negativeButton = new XNAClientButton(WindowManager);
             negativeButton.ClientRectangle = new Rectangle(ClientRectangle.Width - (75 + 8), lblChoiceText.Bottom + 6, 75, 23);
             negativeButton.Name = nameof(negativeButton);
-            negativeButton.Text = "No";
+            negativeButton.Text = "不";
             negativeButton.LeftClick += NegativeButton_LeftClick;
             AddChild(negativeButton);
 
@@ -98,7 +97,7 @@ namespace DTAClient.DXGUI.Multiplayer.CnCNet
 
         // a timeout of zero means the notification will never be automatically dismissed
         public void Show(
-            string headerText, 
+            string headerText,
             Texture2D gameIcon,
             string sender,
             string choiceText,

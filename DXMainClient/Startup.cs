@@ -1,20 +1,20 @@
-﻿using System;
-using System.IO;
-using System.Threading;
-using System.Management;
-using Microsoft.Win32;
-using DTAClient.Domain;
-using ClientCore;
-using Updater;
-using Rampastring.Tools;
-using DTAClient.DXGUI;
-using System.Security.Principal;
-using System.DirectoryServices;
-using System.Linq;
-using DTAClient.Online;
+﻿using ClientCore;
 using ClientCore.INIProcessing;
-using System.Threading.Tasks;
+using DTAClient.Domain;
+using DTAClient.DXGUI;
+using DTAClient.Online;
+using Microsoft.Win32;
+using Rampastring.Tools;
+using System;
+using System.DirectoryServices;
 using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Management;
+using System.Security.Principal;
+using System.Threading;
+using System.Threading.Tasks;
+using Updater;
 
 namespace DTAClient
 {
@@ -30,11 +30,28 @@ namespace DTAClient
         {
             string themePath = ClientConfiguration.Instance.GetThemePath(UserINISettings.Instance.ClientTheme);
 
+            string language = ClientConfiguration.Instance.GetLanguagePath(UserINISettings.Instance.Language);
+
+           
             if (themePath == null)
             {
                 themePath = ClientConfiguration.Instance.GetThemeInfoFromIndex(0)[1];
             }
 
+            if(language == null)
+            {
+                language = ClientConfiguration.Instance.GetLanguageInfoFromIndex(0)[1];
+            }
+
+            try
+            {
+                CopyDirectory(language, "./");
+            }
+            catch
+            {
+                Logger.Log("缺少语言文件");
+            }
+            
             ProgramConstants.RESOURCES_DIR = "Resources/" + themePath;
 
             if (!Directory.Exists(ProgramConstants.RESOURCES_DIR))
@@ -117,6 +134,27 @@ namespace DTAClient
 
             GameClass gameClass = new GameClass();
             gameClass.Run();
+        }
+
+        private void CopyDirectory(string sourceDirPath, string saveDirPath)
+        {
+           
+            if (sourceDirPath != null)
+            {
+                
+                if (!Directory.Exists(saveDirPath))
+                {
+                    Directory.CreateDirectory(saveDirPath);
+                }
+
+                string[] files = Directory.GetFiles(sourceDirPath);
+                foreach (string file in files)
+                {
+                    string pFilePath = saveDirPath + "\\" + Path.GetFileName(file);
+                  
+                    File.Copy(file, pFilePath, true);
+                }
+            }
         }
 
 #if ARES

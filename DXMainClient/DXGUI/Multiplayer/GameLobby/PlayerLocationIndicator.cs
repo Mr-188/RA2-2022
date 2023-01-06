@@ -1,13 +1,13 @@
-﻿using Rampastring.XNAUI.XNAControls;
+﻿using ClientCore;
+using DTAClient.Domain.Multiplayer;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Rampastring.XNAUI;
+using Rampastring.XNAUI.XNAControls;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using ClientCore;
-using Rampastring.XNAUI;
-using Microsoft.Xna.Framework.Graphics;
 using PlayerInfo = DTAClient.Domain.Multiplayer.PlayerInfo;
-using Microsoft.Xna.Framework;
-using DTAClient.Domain.Multiplayer;
 
 namespace DTAClient.DXGUI.Multiplayer.GameLobby
 {

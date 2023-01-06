@@ -1,6 +1,5 @@
 using ClientCore;
 using ClientGUI;
-using Microsoft.Win32;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Rampastring.Tools;
@@ -8,9 +7,9 @@ using Rampastring.XNAUI;
 using Rampastring.XNAUI.XNAControls;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
+using Localization;
 
 namespace DTAConfig.OptionPanels
 {
@@ -31,9 +30,15 @@ namespace DTAConfig.OptionPanels
         private XNAClientCheckBox chkWindowedMode;
         private XNAClientCheckBox chkBorderlessWindowedMode;
         private XNAClientCheckBox chkBackBufferInVRAM;
+
+
+        //private XNAButton btnFolder;
+        private XNAClientCheckBox chkRandom_wallpaper;
+
         private XNAClientPreferredItemDropDown ddClientResolution;
         private XNAClientCheckBox chkBorderlessClient;
         private XNAClientDropDown ddClientTheme;
+        private XNAClientDropDown ddLanguage;
 
         private List<DirectDrawWrapper> renderers;
 
@@ -63,17 +68,17 @@ namespace DTAConfig.OptionPanels
             var lblIngameResolution = new XNALabel(WindowManager);
             lblIngameResolution.Name = "lblIngameResolution";
             lblIngameResolution.ClientRectangle = new Rectangle(12, 14, 0, 0);
-            lblIngameResolution.Text = "In-game Resolution:";
+            lblIngameResolution.Text = "游戏分辨率:";
 
             ddIngameResolution = new XNAClientDropDown(WindowManager);
             ddIngameResolution.Name = "ddIngameResolution";
             ddIngameResolution.ClientRectangle = new Rectangle(
                 lblIngameResolution.Right + 12,
-                lblIngameResolution.Y - 2, 120, 19);
+                lblIngameResolution.Y - 2, 150, 19);
 
             var clientConfig = ClientConfiguration.Instance;
 
-            var resolutions = GetResolutions(clientConfig.MinimumIngameWidth, 
+            var resolutions = GetResolutions(clientConfig.MinimumIngameWidth,
                 clientConfig.MinimumIngameHeight,
                 clientConfig.MaximumIngameWidth, clientConfig.MaximumIngameHeight);
 
@@ -82,28 +87,28 @@ namespace DTAConfig.OptionPanels
             foreach (var res in resolutions)
                 ddIngameResolution.AddItem(res.ToString());
 
-            var  lblDetailLevel = new XNALabel(WindowManager);
+            var lblDetailLevel = new XNALabel(WindowManager);
             lblDetailLevel.Name = "lblDetailLevel";
             lblDetailLevel.ClientRectangle = new Rectangle(lblIngameResolution.X,
                 ddIngameResolution.Bottom + 16, 0, 0);
-            lblDetailLevel.Text = "Detail Level:";
+            lblDetailLevel.Text = "细节水平:";
 
             ddDetailLevel = new XNAClientDropDown(WindowManager);
             ddDetailLevel.Name = "ddDetailLevel";
             ddDetailLevel.ClientRectangle = new Rectangle(
                 ddIngameResolution.X,
                 lblDetailLevel.Y - 2,
-                ddIngameResolution.Width, 
+                ddIngameResolution.Width,
                 ddIngameResolution.Height);
-            ddDetailLevel.AddItem("Low");
-            ddDetailLevel.AddItem("Medium");
-            ddDetailLevel.AddItem("High");
+            ddDetailLevel.AddItem("低");
+            ddDetailLevel.AddItem("一般");
+            ddDetailLevel.AddItem("高");
 
-            var  lblRenderer = new XNALabel(WindowManager);
+            var lblRenderer = new XNALabel(WindowManager);
             lblRenderer.Name = "lblRenderer";
             lblRenderer.ClientRectangle = new Rectangle(lblDetailLevel.X,
                 ddDetailLevel.Bottom + 16, 0, 0);
-            lblRenderer.Text = "Renderer:";
+            lblRenderer.Text = "渲染补丁:";
 
             ddRenderer = new XNAClientDropDown(WindowManager);
             ddRenderer.Name = "ddRenderer";
@@ -141,7 +146,7 @@ namespace DTAConfig.OptionPanels
             chkWindowedMode.Name = "chkWindowedMode";
             chkWindowedMode.ClientRectangle = new Rectangle(lblDetailLevel.X,
                 ddRenderer.Bottom + 16, 0, 0);
-            chkWindowedMode.Text = "Windowed Mode";
+            chkWindowedMode.Text = "窗口模式";
             chkWindowedMode.CheckedChanged += ChkWindowedMode_CheckedChanged;
 
             chkBorderlessWindowedMode = new XNAClientCheckBox(WindowManager);
@@ -149,7 +154,7 @@ namespace DTAConfig.OptionPanels
             chkBorderlessWindowedMode.ClientRectangle = new Rectangle(
                 chkWindowedMode.X + 50,
                 chkWindowedMode.Bottom + 24, 0, 0);
-            chkBorderlessWindowedMode.Text = "Borderless Windowed Mode";
+            chkBorderlessWindowedMode.Text = "无边框窗口模式";
             chkBorderlessWindowedMode.AllowChecking = false;
 
             chkBackBufferInVRAM = new XNAClientCheckBox(WindowManager);
@@ -157,21 +162,21 @@ namespace DTAConfig.OptionPanels
             chkBackBufferInVRAM.ClientRectangle = new Rectangle(
                 lblDetailLevel.X,
                 chkBorderlessWindowedMode.Bottom + 28, 0, 0);
-            chkBackBufferInVRAM.Text = "Back Buffer in Video Memory" + Environment.NewLine +
-                "(lower performance, but is" + Environment.NewLine + "necessary on some systems)";
+            chkBackBufferInVRAM.Text = "启用显卡的后缓冲区" + Environment.NewLine +
+                "(会降低游戏性能，尽量不要开启)";
 
             var lblClientResolution = new XNALabel(WindowManager);
             lblClientResolution.Name = "lblClientResolution";
             lblClientResolution.ClientRectangle = new Rectangle(
                 285, 14, 0, 0);
-            lblClientResolution.Text = "Client Resolution:";
+            lblClientResolution.Text = "客户端分辨率:";
 
             ddClientResolution = new XNAClientPreferredItemDropDown(WindowManager);
             ddClientResolution.Name = "ddClientResolution";
             ddClientResolution.ClientRectangle = new Rectangle(
                 lblClientResolution.Right + 12,
                 lblClientResolution.Y - 2,
-                Width - (lblClientResolution.Right + 24),
+                160,
                 ddIngameResolution.Height);
             ddClientResolution.AllowDropDown = false;
             ddClientResolution.PreferredItemLabel = "(recommended)";
@@ -186,11 +191,11 @@ namespace DTAConfig.OptionPanels
 
             AddResolutionIfFitting(1024, 600, resolutions);
             AddResolutionIfFitting(1024, 720, resolutions);
-            AddResolutionIfFitting(1280, 600, resolutions);
-            AddResolutionIfFitting(1280, 720, resolutions);
-            AddResolutionIfFitting(1280, 768, resolutions);
-            AddResolutionIfFitting(1280, 800, resolutions);
-
+            AddResolutionIfFitting(1400, 600, resolutions);
+            AddResolutionIfFitting(1400, 720, resolutions);
+            //AddResolutionIfFitting(1400, 768, resolutions);
+            AddResolutionIfFitting(1400, 800, resolutions);
+            AddResolutionIfFitting(1400, 800, resolutions);
             resolutions.Sort();
 
             foreach (var res in resolutions)
@@ -204,9 +209,9 @@ namespace DTAConfig.OptionPanels
             // So we add the optimal resolutions to the list, sort it and then find
             // out the optimal resolution index - it's inefficient, but works
 
-            int optimalWindowedResIndex = resolutions.FindIndex(res => res.ToString() == "1280x800");
+            int optimalWindowedResIndex = resolutions.FindIndex(res => res.ToString() == "1400x800");
             if (optimalWindowedResIndex == -1)
-                optimalWindowedResIndex = resolutions.FindIndex(res => res.ToString() == "1280x768");
+                optimalWindowedResIndex = resolutions.FindIndex(res => res.ToString() == "1400x800");
 
             if (optimalWindowedResIndex > -1)
                 ddClientResolution.PreferredItemIndex = optimalWindowedResIndex;
@@ -216,7 +221,7 @@ namespace DTAConfig.OptionPanels
             chkBorderlessClient.ClientRectangle = new Rectangle(
                 lblClientResolution.X,
                 lblDetailLevel.Y, 0, 0);
-            chkBorderlessClient.Text = "Fullscreen Client";
+            chkBorderlessClient.Text = "客户端全屏";
             chkBorderlessClient.CheckedChanged += ChkBorderlessMenu_CheckedChanged;
             chkBorderlessClient.Checked = true;
 
@@ -225,15 +230,43 @@ namespace DTAConfig.OptionPanels
             lblClientTheme.ClientRectangle = new Rectangle(
                 lblClientResolution.X,
                 lblRenderer.Y, 0, 0);
-            lblClientTheme.Text = "Client Theme:";
+            lblClientTheme.Text = "客户端主题:".L10N("UI:DisplayOptionsPanel:ClientTheme");
+
+
+            chkRandom_wallpaper = new XNAClientCheckBox(WindowManager);
+            chkRandom_wallpaper.Name = "chkRandom_wallpaper";
+            chkRandom_wallpaper.ClientRectangle = new Rectangle(
+                lblClientResolution.X,
+                lblDetailLevel.Y + 60, 0, 0);
+            chkRandom_wallpaper.Text = "随机启动封面";
+            chkRandom_wallpaper.Checked = false;
 
             ddClientTheme = new XNAClientDropDown(WindowManager);
             ddClientTheme.Name = "ddClientTheme";
             ddClientTheme.ClientRectangle = new Rectangle(
                 ddClientResolution.X,
                 ddRenderer.Y,
-                ddClientResolution.Width,
+                160,
                 ddRenderer.Height);
+
+            var lblLanguage = new XNALabel(WindowManager);
+            lblLanguage.Name = "lblLanguage";
+            lblLanguage.ClientRectangle = new Rectangle(
+                lblClientResolution.X,
+                lblRenderer.Y+60, 0, 0);
+            lblLanguage.Text = "游戏语言:";
+
+            ddLanguage = new XNAClientDropDown(WindowManager);
+            ddLanguage.Name = "ddLanguage";
+            ddLanguage.ClientRectangle = new Rectangle(
+                ddClientResolution.X,
+                ddRenderer.Y+60,
+                160,
+                ddRenderer.Height);
+
+            int languageCount = ClientConfiguration.Instance.LanguageCount;
+            for (int i = 0; i < languageCount; i++)
+                ddLanguage.AddItem(ClientConfiguration.Instance.GetLanguageInfoFromIndex(i)[0]);
 
             int themeCount = ClientConfiguration.Instance.ThemeCount;
 
@@ -294,6 +327,8 @@ namespace DTAConfig.OptionPanels
             AddChild(chkBorderlessClient);
             AddChild(lblClientTheme);
             AddChild(ddClientTheme);
+            AddChild(lblLanguage);
+            AddChild(ddLanguage);
             AddChild(lblClientResolution);
             AddChild(ddClientResolution);
             AddChild(lblRenderer);
@@ -302,6 +337,11 @@ namespace DTAConfig.OptionPanels
             AddChild(ddDetailLevel);
             AddChild(lblIngameResolution);
             AddChild(ddIngameResolution);
+
+            //随机封面
+            AddChild(chkRandom_wallpaper);
+
+            //AddChild(btnFolder);
         }
 
         /// <summary>
@@ -324,45 +364,45 @@ namespace DTAConfig.OptionPanels
             }
         }
 
-		private void GetRenderers()
-		{
-			renderers = new List<DirectDrawWrapper>();
+        private void GetRenderers()
+        {
+            renderers = new List<DirectDrawWrapper>();
 
-			var renderersIni = new IniFile(ProgramConstants.GetBaseResourcePath() + RENDERERS_INI);
+            var renderersIni = new IniFile(ProgramConstants.GetBaseResourcePath() + RENDERERS_INI);
 
-			var keys = renderersIni.GetSectionKeys("Renderers");
-			if (keys == null)
-				throw new ClientConfigurationException("[Renderers] not found from Renderers.ini!");
+            var keys = renderersIni.GetSectionKeys("Renderers");
+            if (keys == null)
+                throw new ClientConfigurationException("[Renderers] not found from Renderers.ini!");
 
-			foreach (string key in keys)
-			{
-				string internalName = renderersIni.GetStringValue("Renderers", key, string.Empty);
+            foreach (string key in keys)
+            {
+                string internalName = renderersIni.GetStringValue("Renderers", key, string.Empty);
 
-				var ddWrapper = new DirectDrawWrapper(internalName, renderersIni);
-				renderers.Add(ddWrapper);
-			}
+                var ddWrapper = new DirectDrawWrapper(internalName, renderersIni);
+                renderers.Add(ddWrapper);
+            }
 
-			OSVersion osVersion = ClientConfiguration.Instance.GetOperatingSystemVersion();
+            OSVersion osVersion = ClientConfiguration.Instance.GetOperatingSystemVersion();
 
-			defaultRenderer = renderersIni.GetStringValue("DefaultRenderer", osVersion.ToString(), string.Empty);
+            defaultRenderer = renderersIni.GetStringValue("DefaultRenderer", osVersion.ToString(), string.Empty);
 
-			if (defaultRenderer == null)
-				throw new ClientConfigurationException("Invalid or missing default renderer for operating system: " + osVersion);
+            if (defaultRenderer == null)
+                throw new ClientConfigurationException("Invalid or missing default renderer for operating system: " + osVersion);
 
 
-			string renderer = UserINISettings.Instance.Renderer;
+            string renderer = UserINISettings.Instance.Renderer;
 
-			selectedRenderer = renderers.Find(r => r.InternalName == renderer);
+            selectedRenderer = renderers.Find(r => r.InternalName == renderer);
 
-			if (selectedRenderer == null)
-				selectedRenderer = renderers.Find(r => r.InternalName == defaultRenderer);
+            if (selectedRenderer == null)
+                selectedRenderer = renderers.Find(r => r.InternalName == defaultRenderer);
 
-			if (selectedRenderer == null)
-				throw new ClientConfigurationException("Missing renderer: " + renderer);
+            if (selectedRenderer == null)
+                throw new ClientConfigurationException("Missing renderer: " + renderer);
 
             GameProcessLogic.UseQres = selectedRenderer.UseQres;
             GameProcessLogic.SingleCoreAffinity = selectedRenderer.SingleCoreAffinity;
-		}
+        }
 
 #if TS
 
@@ -548,10 +588,10 @@ namespace DTAConfig.OptionPanels
             {
                 ddClientResolution.AllowDropDown = true;
 
-                int optimalWindowedResIndex = ddClientResolution.Items.FindIndex(i => (string)i.Tag == "1280x800");
+                int optimalWindowedResIndex = ddClientResolution.Items.FindIndex(i => (string)i.Tag == "1400x1000");
 
                 if (optimalWindowedResIndex == -1)
-                    optimalWindowedResIndex = ddClientResolution.Items.FindIndex(i => (string)i.Tag == "1280x768");
+                    optimalWindowedResIndex = ddClientResolution.Items.FindIndex(i => (string)i.Tag == "1400x800");
 
                 if (optimalWindowedResIndex > -1)
                 {
@@ -583,10 +623,10 @@ namespace DTAConfig.OptionPanels
             if (index < 0 && selectedRenderer.Hidden)
             {
                 ddRenderer.AddItem(new XNADropDownItem()
-            {
-                        Text = selectedRenderer.UIName,
-                        Tag = selectedRenderer
-                    });
+                {
+                    Text = selectedRenderer.UIName,
+                    Tag = selectedRenderer
+                });
                 index = ddRenderer.Items.Count - 1;
             }
 
@@ -651,10 +691,16 @@ namespace DTAConfig.OptionPanels
 
             chkBorderlessClient.Checked = UserINISettings.Instance.BorderlessWindowedClient;
 
+            chkRandom_wallpaper.Checked = UserINISettings.Instance.Random_wallpaper;
+
             int selectedThemeIndex = ddClientTheme.Items.FindIndex(
                 ddi => ddi.Text == UserINISettings.Instance.ClientTheme);
             ddClientTheme.SelectedIndex = selectedThemeIndex > -1 ? selectedThemeIndex : 0;
-
+            
+            int selectedLanguageIndex = ddLanguage.Items.FindIndex(
+                ddi => ddi.Text == UserINISettings.Instance.Language);
+            ddLanguage.SelectedIndex = selectedLanguageIndex > -1 ? selectedLanguageIndex : 0;
+ 
 #if YR
             chkBackBufferInVRAM.Checked = UserINISettings.Instance.BackBufferInVRAM;
 #else
@@ -741,18 +787,29 @@ namespace DTAConfig.OptionPanels
 
             IniSettings.BorderlessWindowedClient.Value = chkBorderlessClient.Checked;
 
+            if (IniSettings.Language != ddLanguage.SelectedItem.Text)
+                restartRequired = true;
+
+            IniSettings.Language.Value = ddLanguage.SelectedItem.Text;
+
             if (IniSettings.ClientTheme != ddClientTheme.SelectedItem.Text)
                 restartRequired = true;
 
             IniSettings.ClientTheme.Value = ddClientTheme.SelectedItem.Text;
 
+            //随机壁纸
+            IniSettings.Random_wallpaper.Value = chkRandom_wallpaper.Checked;
+
+
 #if YR
             IniSettings.BackBufferInVRAM.Value = chkBackBufferInVRAM.Checked;
+
+
 #else
             IniSettings.BackBufferInVRAM.Value = !chkBackBufferInVRAM.Checked;
 #endif
 
-            if (selectedRenderer != originalRenderer || 
+            if (selectedRenderer != originalRenderer ||
                 !File.Exists(ProgramConstants.GamePath + selectedRenderer.ConfigFileName))
             {
                 foreach (var renderer in renderers)
@@ -761,7 +818,7 @@ namespace DTAConfig.OptionPanels
                         renderer.Clean();
                 }
             }
-            
+
             selectedRenderer.Apply();
 
             GameProcessLogic.UseQres = selectedRenderer.UseQres;
@@ -784,7 +841,7 @@ namespace DTAConfig.OptionPanels
                     rendererSettingsIni.SetBooleanValue(selectedRenderer.WindowedModeSection,
                         selectedRenderer.BorderlessWindowedModeKey, borderlessModeIniValue);
                 }
-                
+
                 rendererSettingsIni.WriteIniFile();
             }
 

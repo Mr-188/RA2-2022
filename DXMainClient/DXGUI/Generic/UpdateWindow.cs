@@ -334,7 +334,7 @@ namespace DTAClient.DXGUI.Generic
         }
 
         string reason = String.Empty;
-        
+
         /// <summary>
         /// The returned error message from the update failure.
         /// </summary>

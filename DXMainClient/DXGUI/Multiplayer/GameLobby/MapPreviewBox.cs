@@ -1,7 +1,7 @@
 ﻿using ClientCore;
+using ClientGUI;
 using DTAClient.Domain.Multiplayer;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Rampastring.Tools;
@@ -12,7 +12,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using ClientGUI;
 
 namespace DTAClient.DXGUI.Multiplayer.GameLobby
 {
@@ -35,14 +34,14 @@ namespace DTAClient.DXGUI.Multiplayer.GameLobby
     {
         private const int MAX_STARTING_LOCATIONS = 8;
 
-        public delegate void LocalStartingLocationSelectedEventHandler(object sender, 
+        public delegate void LocalStartingLocationSelectedEventHandler(object sender,
             LocalStartingLocationEventArgs e);
 
         public event EventHandler<LocalStartingLocationEventArgs> LocalStartingLocationSelected;
 
         public event EventHandler StartingLocationApplied;
 
-        public MapPreviewBox(WindowManager windowManager, 
+        public MapPreviewBox(WindowManager windowManager,
             List<PlayerInfo> players, List<PlayerInfo> aiPlayers,
             List<MultiplayerColor> mpColors, string[] sides, IniFile gameOptionsIni)
             : base(windowManager)
@@ -93,7 +92,7 @@ namespace DTAClient.DXGUI.Multiplayer.GameLobby
 
         private XNAContextMenu mapContextMenu;
         private XNAContextMenuItem toggleFavoriteMapItem;
-        private XNAClientButton btnToggleFavoriteMap;
+        public XNAClientButton btnToggleFavoriteMap;
 
         private CoopBriefingBox briefingBox;
 
@@ -135,7 +134,7 @@ namespace DTAClient.DXGUI.Multiplayer.GameLobby
 
             toggleFavoriteMapItem = new XNAContextMenuItem()
             {
-                Text = "Favorite",
+                Text = "收藏",
                 SelectAction = ToggleFavoriteMap,
                 SelectableChecker = () => GameModeMap != null
             };
@@ -144,10 +143,11 @@ namespace DTAClient.DXGUI.Multiplayer.GameLobby
             mapContextMenu.AddItem(toggleFavoriteMapItem);
 
             btnToggleFavoriteMap = new XNAClientButton(WindowManager);
+
             btnToggleFavoriteMap.IdleTexture = AssetLoader.LoadTexture("favInactive.png");
             btnToggleFavoriteMap.HoverTexture = AssetLoader.LoadTexture("favInactive.png");
             btnToggleFavoriteMap.LeftClick += (sender, args) => ToggleFavorite?.Invoke(sender, args);
-            btnToggleFavoriteMap.SetToolTipText("Toggle Favorite Map");
+            btnToggleFavoriteMap.SetToolTipText("收藏");
 
             double angularVelocity = gameOptionsIni.GetDoubleValue("General", "StartingLocationAngularVelocity", 0.015);
             double reservedAngularVelocity = gameOptionsIni.GetDoubleValue("General", "ReservedStartingLocationAngularVelocity", -0.0075);
@@ -157,7 +157,7 @@ namespace DTAClient.DXGUI.Multiplayer.GameLobby
             // Init starting location indicators
             for (int i = 0; i < MAX_STARTING_LOCATIONS; i++)
             {
-                PlayerLocationIndicator indicator = new PlayerLocationIndicator(WindowManager, mpColors, 
+                PlayerLocationIndicator indicator = new PlayerLocationIndicator(WindowManager, mpColors,
                     nameBackgroundColor, nameBorderColor, contextMenu);
                 indicator.FontIndex = FontIndex;
                 indicator.Visible = false;
@@ -182,7 +182,7 @@ namespace DTAClient.DXGUI.Multiplayer.GameLobby
             briefingBox = new CoopBriefingBox(WindowManager);
             AddChild(briefingBox);
             briefingBox.Disable();
-            
+
             AddChild(mapContextMenu);
             mapContextMenu.Disable();
 
@@ -201,7 +201,7 @@ namespace DTAClient.DXGUI.Multiplayer.GameLobby
 
         private void MapImage_RightClick(object sender, EventArgs e)
         {
-            toggleFavoriteMapItem.Text = GameModeMap.IsFavorite ? "Remove Favorite" : "Add Favorite";
+            toggleFavoriteMapItem.Text = GameModeMap.IsFavorite ? "从收藏中删除" : "添加到收藏";
             mapContextMenu.Open(GetCursorPoint());
         }
 
@@ -298,7 +298,7 @@ namespace DTAClient.DXGUI.Multiplayer.GameLobby
             int index = 0;
             foreach (PlayerInfo pInfo in players.Concat(aiPlayers))
             {
-                contextMenu.Items[index].Selectable = pInfo.StartingLocation != (int)indicator.Tag + 1 && 
+                contextMenu.Items[index].Selectable = pInfo.StartingLocation != (int)indicator.Tag + 1 &&
                     pInfo.SideId < sides.Length + RandomSelectorCount;
                 index++;
             }
@@ -320,7 +320,7 @@ namespace DTAClient.DXGUI.Multiplayer.GameLobby
                 }
 
                 return;
-            }       
+            }
 
             foreach (PlayerInfo pInfo in players.Union(aiPlayers))
             {
@@ -331,13 +331,17 @@ namespace DTAClient.DXGUI.Multiplayer.GameLobby
             StartingLocationApplied?.Invoke(this, EventArgs.Empty);
         }
 
+
+
         /// <summary>
         /// Updates the map preview texture's position inside
         /// this control's display rectangle and the 
         /// starting location indicators' positions.
         /// </summary>
-        private void UpdateMap()
+        public void UpdateMap()
         {
+            
+
             if (disposeTextures && previewTexture != null && !previewTexture.IsDisposed)
                 previewTexture.Dispose();
 
@@ -407,8 +411,11 @@ namespace DTAClient.DXGUI.Multiplayer.GameLobby
             textureRectangle = new Rectangle(texturePositionX, texturePositionY,
                 textureWidth, textureHeight);
 
-            List<Point> startingLocations = GameModeMap.Map.GetStartingLocationPreviewCoords(new Point(previewTexture.Width, previewTexture.Height));
 
+         //  GameModeMap.Map.SetInfoFromCustomMap();
+          
+            List<Point> startingLocations = GameModeMap.Map.GetStartingLocationPreviewCoords(new Point(previewTexture.Width, previewTexture.Height));
+            
             for (int i = 0; i < startingLocations.Count && i < GameModeMap.Map.MaxPlayers; i++)
             {
                 PlayerLocationIndicator indicator = startingLocationIndicators[i];
@@ -417,6 +424,7 @@ namespace DTAClient.DXGUI.Multiplayer.GameLobby
                     texturePositionX + (int)(startingLocations[i].X * ratio),
                     texturePositionY + (int)(startingLocations[i].Y * ratio));
 
+        
                 indicator.SetPosition(location);
                 indicator.Enabled = true;
                 indicator.Visible = true;
@@ -441,7 +449,7 @@ namespace DTAClient.DXGUI.Multiplayer.GameLobby
 
                 extraTextures.Add(new ExtraMapPreviewTexture(extraTexture, location));
             }
-            btnToggleFavoriteMap.ClientRectangle = new Rectangle(Width - 22, 4, 18, 18);
+            btnToggleFavoriteMap.ClientRectangle = new Rectangle(Width - 50, 4, 40, 40);
             RefreshFavoriteBtn();
         }
 

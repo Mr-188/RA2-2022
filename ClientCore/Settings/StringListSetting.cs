@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Rampastring.Tools;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Rampastring.Tools;
 
 namespace ClientCore.Settings
 {
@@ -32,7 +32,7 @@ namespace ClientCore.Settings
 
         public void Add(string value)
         {
-            var values = Get().Concat(new []{value}).ToList();
+            var values = Get().Concat(new[] { value }).ToList();
             Set(values);
         }
 

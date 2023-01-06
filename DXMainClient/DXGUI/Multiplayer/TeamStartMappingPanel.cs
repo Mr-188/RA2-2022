@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using ClientCore;
-using ClientGUI;
+﻿using ClientGUI;
 using DTAClient.Domain.Multiplayer;
 using Microsoft.Xna.Framework;
 using Rampastring.XNAUI;
 using Rampastring.XNAUI.XNAControls;
+using System;
 
 namespace DTAClient.DXGUI.Multiplayer
 {
@@ -49,8 +47,8 @@ namespace DTAClient.DXGUI.Multiplayer
         public void SetTeamStartMapping(TeamStartMapping teamStartMapping)
         {
             var teamIndex = teamStartMapping?.TeamIndex ?? _defaultTeamIndex;
-            
-            ddTeams.SelectedIndex = teamIndex >= 0 && teamIndex < ddTeams.Items.Count ? 
+
+            ddTeams.SelectedIndex = teamIndex >= 0 && teamIndex < ddTeams.Items.Count ?
                 teamIndex : -1;
         }
 

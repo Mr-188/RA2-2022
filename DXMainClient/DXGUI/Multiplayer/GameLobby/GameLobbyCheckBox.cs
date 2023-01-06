@@ -1,11 +1,10 @@
-﻿using System;
+﻿using ClientGUI;
+using DTAClient.Domain.Multiplayer;
 using Rampastring.Tools;
 using Rampastring.XNAUI;
-using ClientCore;
-using ClientGUI;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using DTAClient.Domain.Multiplayer;
 
 namespace DTAClient.DXGUI.Multiplayer.GameLobby
 {
@@ -32,7 +31,7 @@ namespace DTAClient.DXGUI.Multiplayer.GameLobby
     /// </summary>
     public class GameLobbyCheckBox : XNAClientCheckBox
     {
-        public GameLobbyCheckBox(WindowManager windowManager) : base (windowManager) { }
+        public GameLobbyCheckBox(WindowManager windowManager) : base(windowManager) { }
 
         public bool IsMultiplayer { get; set; }
 
@@ -60,6 +59,7 @@ namespace DTAClient.DXGUI.Multiplayer.GameLobby
 
         public CheckBoxMapScoringMode MapScoringMode { get; private set; } = CheckBoxMapScoringMode.Irrelevant;
 
+        protected static string CloseCheck;
         private string spawnIniOption;
 
         private string customIniPath;
@@ -110,6 +110,11 @@ namespace DTAClient.DXGUI.Multiplayer.GameLobby
                 case "MapScoringMode":
                     MapScoringMode = (CheckBoxMapScoringMode)Enum.Parse(typeof(CheckBoxMapScoringMode), value);
                     return;
+                case "CloseCheck":
+                    CloseCheck = value;
+                    return;
+                    //case "DisallowedPlayerSides":
+                    //DisallowedPlayerSides
             }
 
             base.ParseAttributeFromINI(iniFile, key, value);
@@ -161,10 +166,12 @@ namespace DTAClient.DXGUI.Multiplayer.GameLobby
                 for (int i = 0; i < DisallowedSideIndices.Count; i++)
                 {
                     int sideNotAllowed = DisallowedSideIndices[i];
+
                     disallowedArray[sideNotAllowed] = true;
                 }
             }
         }
+
 
         public override void OnLeftClick()
         {

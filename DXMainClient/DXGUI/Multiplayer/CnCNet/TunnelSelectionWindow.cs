@@ -3,10 +3,6 @@ using DTAClient.Domain.Multiplayer.CnCNet;
 using Rampastring.XNAUI;
 using Rampastring.XNAUI.XNAControls;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DTAClient.DXGUI.Multiplayer.CnCNet
 {
@@ -57,7 +53,7 @@ namespace DTAClient.DXGUI.Multiplayer.CnCNet
             btnApply.Name = nameof(btnApply);
             btnApply.Width = UIDesignConstants.BUTTON_WIDTH_92;
             btnApply.Height = UIDesignConstants.BUTTON_HEIGHT;
-            btnApply.Text = "Apply";
+            btnApply.Text = "应用";
             btnApply.X = UIDesignConstants.EMPTY_SPACE_SIDES + UIDesignConstants.CONTROL_HORIZONTAL_MARGIN;
             btnApply.Y = lbTunnelList.Bottom + UIDesignConstants.CONTROL_VERTICAL_MARGIN * 3;
             AddChild(btnApply);
@@ -67,7 +63,7 @@ namespace DTAClient.DXGUI.Multiplayer.CnCNet
             btnCancel.Name = nameof(btnCancel);
             btnCancel.Width = UIDesignConstants.BUTTON_WIDTH_92;
             btnCancel.Height = UIDesignConstants.BUTTON_HEIGHT;
-            btnCancel.Text = "Cancel";
+            btnCancel.Text = "取消";
             btnCancel.Y = btnApply.Y;
             AddChild(btnCancel);
             btnCancel.LeftClick += BtnCancel_LeftClick;

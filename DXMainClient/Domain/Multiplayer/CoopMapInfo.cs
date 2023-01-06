@@ -1,7 +1,7 @@
-﻿using Rampastring.Tools;
+﻿using Newtonsoft.Json;
+using Rampastring.Tools;
 using System;
 using System.Collections.Generic;
-using Newtonsoft.Json;
 
 namespace DTAClient.Domain.Multiplayer
 {
@@ -15,7 +15,8 @@ namespace DTAClient.Domain.Multiplayer
         public List<int> DisallowedPlayerSides = new List<int>();
         [JsonProperty]
         public List<int> DisallowedPlayerColors = new List<int>();
-
+        [JsonProperty]
+        public List<int> DisallowedPlayerStarts= new List<int>();
         public void SetHouseInfos(IniSection iniSection)
         {
             EnemyHouses = GetGenericHouseInfo(iniSection, "EnemyHouse");

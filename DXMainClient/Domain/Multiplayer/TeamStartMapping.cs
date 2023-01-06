@@ -1,15 +1,14 @@
-﻿using System;
+﻿using ClientCore;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
-using ClientCore;
-using Newtonsoft.Json;
 
 namespace DTAClient.Domain.Multiplayer
 {
     public class TeamStartMapping
     {
         private const char LIST_SEPARATOR = ',';
-        
+
         public const string NO_TEAM = "x";
         public const string RANDOM_TEAM = "-";
         public static readonly List<string> TEAMS = new List<string>() { NO_TEAM, RANDOM_TEAM }.Concat(ProgramConstants.TEAMS).ToList();
@@ -40,7 +39,7 @@ namespace DTAClient.Domain.Multiplayer
         /// </summary>
         /// <param name="teamStartMappings"></param>
         /// <returns></returns>
-        public static string ToListString(List<TeamStartMapping> teamStartMappings) 
+        public static string ToListString(List<TeamStartMapping> teamStartMappings)
             => string.Join(LIST_SEPARATOR.ToString(), teamStartMappings.Select(mapping => mapping.Team));
 
         /// <summary>
@@ -53,7 +52,7 @@ namespace DTAClient.Domain.Multiplayer
         {
             if (string.IsNullOrWhiteSpace(str))
                 return new List<TeamStartMapping>();
-            
+
             var parts = str.Split(LIST_SEPARATOR);
 
             return parts.Select((part, index) => new TeamStartMapping()

@@ -1,10 +1,8 @@
 ﻿using ClientCore;
+using DTAClient.DXGUI;
 using DTAClient.Online.EventArguments;
-using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using DTAClient.DXGUI;
 
 namespace DTAClient.Online
 {
@@ -118,7 +116,7 @@ namespace DTAClient.Online
 
             if (notifyOnUserListChange)
             {
-                AddMessage(new ChatMessage(user.IRCUser.Name + " has joined " + UIName + "."));
+                AddMessage(new ChatMessage(user.IRCUser.Name + " 加入了 " + UIName + "."));
             }
 
 #if !YR
@@ -160,7 +158,7 @@ namespace DTAClient.Online
                     users.Clear();
                 }
 
-                AddMessage(new ChatMessage(userName + " has been kicked from " + UIName + "."));
+                AddMessage(new ChatMessage(userName + " 被踢出了 " + UIName + "."));
 
                 UserKicked?.Invoke(this, new UserNameEventArgs(userName));
             }
@@ -172,7 +170,7 @@ namespace DTAClient.Online
             {
                 if (notifyOnUserListChange)
                 {
-                    AddMessage(new ChatMessage(userName + " has left from " + UIName + "."));
+                    AddMessage(new ChatMessage(userName + " 已经离开了 " + UIName + "."));
                 }
 
                 UserLeft?.Invoke(this, new UserNameEventArgs(userName));
@@ -185,7 +183,7 @@ namespace DTAClient.Online
             {
                 if (notifyOnUserListChange && users.Find(userName) != null)
                 {
-                    AddMessage(new ChatMessage(userName + " has quit from CnCNet."));
+                    AddMessage(new ChatMessage(userName + " 退出CnCNet."));
                 }
 
                 UserQuitIRC?.Invoke(this, new UserNameEventArgs(userName));

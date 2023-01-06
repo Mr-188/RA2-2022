@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using DTAClient.Online;
+﻿using DTAClient.Online;
 using Rampastring.XNAUI;
 using Rampastring.XNAUI.XNAControls;
+using System;
+using System.Collections.Generic;
 
 namespace DTAClient.DXGUI.Multiplayer.CnCNet
 {
@@ -20,7 +20,7 @@ namespace DTAClient.DXGUI.Multiplayer.CnCNet
         public override void Initialize()
         {
             AllowRightClickUnselect = false;
-            
+
             base.Initialize();
 
             AddColumn("Player");
@@ -82,7 +82,7 @@ namespace DTAClient.DXGUI.Multiplayer.CnCNet
         {
             if (HoveredIndex < 0 || HoveredIndex >= ItemCount)
                 return;
-            
+
             SelectedIndex = HoveredIndex;
 
             var selectedItem = GetItem(0, SelectedIndex);

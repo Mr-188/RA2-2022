@@ -1,9 +1,7 @@
 ﻿using ClientGUI;
 using DTAClient.Domain.Multiplayer.CnCNet;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
 using Rampastring.XNAUI;
-using Rampastring.XNAUI.Input;
 using Rampastring.XNAUI.XNAControls;
 using System;
 
@@ -82,8 +80,8 @@ namespace DTAClient.DXGUI.Multiplayer.CnCNet
                 if (!privateMessagingWindow.Enabled) return;
                 pmWindowWasEnabled = true;
                 privateMessagingWindow.Disable();
-            } 
-            else if(pmWindowWasEnabled)
+            }
+            else if (pmWindowWasEnabled)
             {
                 privateMessagingWindow.Enable();
             }

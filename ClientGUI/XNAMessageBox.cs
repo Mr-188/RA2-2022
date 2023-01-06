@@ -104,7 +104,7 @@ namespace ClientGUI
             btnOK.HoverTexture = AssetLoader.LoadTexture("75pxbtn_c.png");
             btnOK.HoverSoundEffect = new EnhancedSoundEffect("button.wav");
             btnOK.Name = "btnOK";
-            btnOK.Text = "OK";
+            btnOK.Text = "是";
             btnOK.LeftClick += BtnOK_LeftClick;
             btnOK.HotKey = Keys.Enter;
 
@@ -124,7 +124,7 @@ namespace ClientGUI
             btnYes.HoverTexture = AssetLoader.LoadTexture("75pxbtn_c.png");
             btnYes.HoverSoundEffect = new EnhancedSoundEffect("button.wav");
             btnYes.Name = "btnYes";
-            btnYes.Text = "Yes";
+            btnYes.Text = "是";
             btnYes.LeftClick += BtnYes_LeftClick;
             btnYes.HotKey = Keys.Y;
 
@@ -140,7 +140,7 @@ namespace ClientGUI
             btnNo.HoverTexture = AssetLoader.LoadTexture("75pxbtn_c.png");
             btnNo.HoverSoundEffect = new EnhancedSoundEffect("button.wav");
             btnNo.Name = "btnNo";
-            btnNo.Text = "No";
+            btnNo.Text = "否";
             btnNo.LeftClick += BtnNo_LeftClick;
             btnNo.HotKey = Keys.N;
 
@@ -159,7 +159,7 @@ namespace ClientGUI
             btnOK.HoverTexture = AssetLoader.LoadTexture("75pxbtn_c.png");
             btnOK.HoverSoundEffect = new EnhancedSoundEffect("button.wav");
             btnOK.Name = "btnOK";
-            btnOK.Text = "OK";
+            btnOK.Text = "不";
             btnOK.LeftClick += BtnYes_LeftClick;
             btnOK.HotKey = Keys.Enter;
 
@@ -175,7 +175,7 @@ namespace ClientGUI
             btnCancel.HoverTexture = AssetLoader.LoadTexture("75pxbtn_c.png");
             btnCancel.HoverSoundEffect = new EnhancedSoundEffect("button.wav");
             btnCancel.Name = "btnCancel";
-            btnCancel.Text = "Cancel";
+            btnCancel.Text = "取消";
             btnCancel.LeftClick += BtnCancel_LeftClick;
             btnCancel.HotKey = Keys.C;
 

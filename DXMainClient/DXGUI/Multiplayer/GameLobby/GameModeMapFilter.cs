@@ -1,7 +1,7 @@
-﻿using System;
+﻿using DTAClient.Domain.Multiplayer;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using DTAClient.Domain.Multiplayer;
 
 namespace DTAClient.DXGUI.Multiplayer.GameLobby
 {

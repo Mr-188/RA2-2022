@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Localization;
+using System;
 using System.Windows.Forms;
 using System.IO;
 using System.Reflection;
@@ -66,6 +67,7 @@ namespace DTAClient
             "ClientGUI",
             "ClientCore",
             "DTAConfig",
+            "Localization",
             "MonoGame.Framework",
             "Rampastring.XNAUI",
             "Sdl",
@@ -93,7 +95,7 @@ namespace DTAClient
                 {
                     case "-NOAUDIO":
                         // TODO fix
-                        throw new NotImplementedException("-NOAUDIO is currently not implemented, please run the client without it.");
+                        throw new NotImplementedException("-NOAUDIO is currently not implemented, please run the client without it.".L10N("UI:Main:NoAudio"));
                     case "-MULTIPLEINSTANCE":
                         multipleInstanceMode = true;
                         break;
@@ -187,7 +189,7 @@ namespace DTAClient
 #if DEBUG
                 try
                 {
-                   data = File.ReadAllBytes(string.Format("{0}{1}.dll", SPECIFIC_LIBRARY_PATH, name));
+                    data = File.ReadAllBytes(string.Format("{0}{1}.dll", SPECIFIC_LIBRARY_PATH, name));
                 }
                 catch
                 {

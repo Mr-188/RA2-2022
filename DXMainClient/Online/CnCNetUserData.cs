@@ -1,12 +1,11 @@
 ﻿using ClientCore;
+using Newtonsoft.Json;
 using Rampastring.Tools;
 using Rampastring.XNAUI;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using Newtonsoft.Json;
 
 namespace DTAClient.Online
 {
@@ -23,7 +22,7 @@ namespace DTAClient.Online
         /// directly you have to also invoke UserFriendToggled event handler for every
         /// user name added or removed.
         /// </summary>
-        public List<string> FriendList { get; private set;  } = new List<string>();
+        public List<string> FriendList { get; private set; } = new List<string>();
 
         /// <summary>
         /// A list which contains idents of ignored users. If you manipulate this list

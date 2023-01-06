@@ -5,11 +5,9 @@ using DTAClient.Domain;
 using DTAClient.Domain.LAN;
 using DTAClient.Domain.Multiplayer;
 using DTAClient.Domain.Multiplayer.LAN;
-using DTAClient.DXGUI.Generic;
 using DTAClient.DXGUI.Multiplayer.GameLobby;
 using DTAClient.Online;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Rampastring.Tools;
 using Rampastring.XNAUI;
@@ -105,21 +103,21 @@ namespace DTAClient.DXGUI.Multiplayer
             btnNewGame = new XNAClientButton(WindowManager);
             btnNewGame.Name = "btnNewGame";
             btnNewGame.ClientRectangle = new Rectangle(12, Height - 35, UIDesignConstants.BUTTON_WIDTH_133, UIDesignConstants.BUTTON_HEIGHT);
-            btnNewGame.Text = "Create Game";
+            btnNewGame.Text = "创建房间";
             btnNewGame.LeftClick += BtnNewGame_LeftClick;
 
             btnJoinGame = new XNAClientButton(WindowManager);
             btnJoinGame.Name = "btnJoinGame";
             btnJoinGame.ClientRectangle = new Rectangle(btnNewGame.Right + 12,
                 btnNewGame.Y, UIDesignConstants.BUTTON_WIDTH_133, UIDesignConstants.BUTTON_HEIGHT);
-            btnJoinGame.Text = "Join Game";
+            btnJoinGame.Text = "加入游戏";
             btnJoinGame.LeftClick += BtnJoinGame_LeftClick;
 
             btnMainMenu = new XNAClientButton(WindowManager);
             btnMainMenu.Name = "btnMainMenu";
             btnMainMenu.ClientRectangle = new Rectangle(Width - 145,
                 btnNewGame.Y, UIDesignConstants.BUTTON_WIDTH_133, UIDesignConstants.BUTTON_HEIGHT);
-            btnMainMenu.Text = "Main Menu";
+            btnMainMenu.Text = "主菜单";
             btnMainMenu.LeftClick += BtnMainMenu_LeftClick;
 
             lbGameList = new GameListBox(WindowManager, localGame, null);
@@ -157,7 +155,7 @@ namespace DTAClient.DXGUI.Multiplayer
             tbChatInput.ClientRectangle = new Rectangle(lbChatMessages.X,
                 btnNewGame.Y, lbChatMessages.Width,
                 btnNewGame.Height);
-            tbChatInput.Suggestion = "Type here to chat...";
+            tbChatInput.Suggestion = "在这里打字聊天...";
             tbChatInput.MaximumTextLength = 200;
             tbChatInput.EnterPressed += TbChatInput_EnterPressed;
 
@@ -165,7 +163,7 @@ namespace DTAClient.DXGUI.Multiplayer
             lblColor.Name = "lblColor";
             lblColor.ClientRectangle = new Rectangle(lbChatMessages.X, 14, 0, 0);
             lblColor.FontIndex = 1;
-            lblColor.Text = "YOUR COLOR:";
+            lblColor.Text = "聊天文字颜色:";
 
             ddColor = new XNAClientDropDown(WindowManager);
             ddColor.Name = "ddColor";
@@ -232,7 +230,7 @@ namespace DTAClient.DXGUI.Multiplayer
             DarkeningPanel.AddAndInitializeWithControl(WindowManager, lanGameLobby);
             lanGameLobby.Disable();
 
-            lanGameLoadingLobby = new LANGameLoadingLobby(WindowManager, 
+            lanGameLoadingLobby = new LANGameLoadingLobby(WindowManager,
                 gameModes, chatColors, discordHandler);
             DarkeningPanel.AddAndInitializeWithControl(WindowManager, lanGameLoadingLobby);
             lanGameLoadingLobby.Disable();
@@ -304,7 +302,7 @@ namespace DTAClient.DXGUI.Multiplayer
 
         private void GameCreationWindow_NewGame(object sender, EventArgs e)
         {
-            lanGameLobby.SetUp(true, 
+            lanGameLobby.SetUp(true,
                 new IPEndPoint(IPAddress.Loopback, ProgramConstants.LAN_GAME_LOBBY_PORT), null);
 
             lanGameLobby.Enable();
@@ -346,11 +344,11 @@ namespace DTAClient.DXGUI.Multiplayer
             {
                 Logger.Log("Creating LAN socket failed! Message: " + ex.Message);
                 lbChatMessages.AddMessage(new ChatMessage(Color.Red,
-                    "Creating LAN socket failed! Message: " + ex.Message));
+                    "创建LAN套接字失败! " + ex.Message));
                 lbChatMessages.AddMessage(new ChatMessage(Color.Red,
-                    "Please check your firewall settings."));
+                    "请检查您的防火墙设置."));
                 lbChatMessages.AddMessage(new ChatMessage(Color.Red,
-                    "Also make sure that no other application is listening to traffic on UDP ports 1232 - 1234."));
+                    "还要确保没有其他应用程序监听UDP端口1232 - 1234上的流量."));
                 initSuccess = false;
                 return;
             }
@@ -451,7 +449,7 @@ namespace DTAClient.DXGUI.Multiplayer
                     if (colorIndex < 0 || colorIndex >= chatColors.Length)
                         return;
 
-                    lbChatMessages.AddMessage(new ChatMessage(user.Name, 
+                    lbChatMessages.AddMessage(new ChatMessage(user.Name,
                         chatColors[colorIndex].XNAColor, DateTime.Now, parameters[1]));
 
                     break;
@@ -524,14 +522,14 @@ namespace DTAClient.DXGUI.Multiplayer
 
             if (hg.Game.InternalName.ToUpper() != localGame.ToUpper())
             {
-                lbChatMessages.AddMessage("The selected game is for " +
+                lbChatMessages.AddMessage("所选游戏是为 " +
                     gameCollection.GetGameNameFromInternalName(hg.Game.InternalName) + "!");
                 return;
             }
 
             if (hg.Locked)
             {
-                lbChatMessages.AddMessage("The selected game is locked!");
+                lbChatMessages.AddMessage("所选游戏已被锁定!");
                 return;
             }
 
@@ -547,7 +545,7 @@ namespace DTAClient.DXGUI.Multiplayer
             {
                 if (hg.Players.Contains(ProgramConstants.PLAYERNAME))
                 {
-                    lbChatMessages.AddMessage("Your name is already taken in the game.");
+                    lbChatMessages.AddMessage("你的名字已经有人用了.");
                     return;
                 }
             }
@@ -557,7 +555,7 @@ namespace DTAClient.DXGUI.Multiplayer
                 // TODO Show warning
             }
 
-            lbChatMessages.AddMessage("Attempting to join game " + hg.RoomName + "...");
+            lbChatMessages.AddMessage("尝试加入游戏 " + hg.RoomName + "...");
 
             try
             {
@@ -589,7 +587,7 @@ namespace DTAClient.DXGUI.Multiplayer
                     lanGameLobby.SetUp(false, hg.EndPoint, client);
                     lanGameLobby.Enable();
 
-                    buffer = encoding.GetBytes("JOIN" + ProgramConstants.LAN_DATA_SEPARATOR + 
+                    buffer = encoding.GetBytes("JOIN" + ProgramConstants.LAN_DATA_SEPARATOR +
                         ProgramConstants.PLAYERNAME + ProgramConstants.LAN_MESSAGE_SEPARATOR);
 
                     client.GetStream().Write(buffer, 0, buffer.Length);
@@ -601,7 +599,7 @@ namespace DTAClient.DXGUI.Multiplayer
             catch (Exception ex)
             {
                 lbChatMessages.AddMessage(null,
-                    "Connecting to the game failed! Message: " + ex.Message, Color.White);
+                    "连接游戏失败!消息: " + ex.Message, Color.White);
             }
         }
 

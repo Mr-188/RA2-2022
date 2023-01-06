@@ -75,7 +75,7 @@ namespace DTAConfig.CustomSettings
             if (CheckAvailability)
             {
                 Enabled = true;
-                
+
                 if (ResetUnavailableValue)
                 {
                     if (DisabledFilesComplete != EnabledFilesComplete)

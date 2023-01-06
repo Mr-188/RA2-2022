@@ -7,7 +7,7 @@ namespace ClientCore.Statistics
     {
         public PlayerStatistics() { }
 
-        public PlayerStatistics(string name, bool isLocal, bool isAi, bool isSpectator, 
+        public PlayerStatistics(string name, bool isLocal, bool isAi, bool isSpectator,
             int side, int team, int color, int aiLevel)
         {
             Name = name;
@@ -22,7 +22,7 @@ namespace ClientCore.Statistics
 
         public string Name { get; set; }
         public int Kills { get; set; }
-        public int Losses {get; set;}
+        public int Losses { get; set; }
         public int Economy { get; set; }
         public int Score { get; set; }
         public int Side { get; set; }

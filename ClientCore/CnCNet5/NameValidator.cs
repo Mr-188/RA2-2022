@@ -15,16 +15,16 @@ namespace ClientCore.CnCNet5
             var profanityFilter = new ProfanityFilter();
 
             if (string.IsNullOrEmpty(name))
-                return "Please enter a name.";
+                return "请输入一个名称.";
 
             if (profanityFilter.IsOffensive(name))
-                return "Please enter a name that is less offensive.";
+                return "请输入一个不那么冒犯的名称.";
 
             if (int.TryParse(name.Substring(0, 1), out _))
-                return "The first character in the player name cannot be a number.";
+                return "玩家名的第一个字符不能是数字.";
 
             if (name[0] == '-')
-                return "The first character in the player name cannot be a dash ( - ).";
+                return "玩家名的第一个字符不能是破折号(-).";
 
             // Check that there are no invalid chars
             char[] allowedCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_[]|\\{}^`".ToCharArray();
@@ -34,13 +34,13 @@ namespace ClientCore.CnCNet5
             {
                 if (!allowedCharacters.Contains(nickChar))
                 {
-                    return "Your player name has invalid characters in it." + Environment.NewLine +
-                    "Allowed characters are anything from A to Z and numbers.";
+                    return "你的玩家名中有无效字符." + Environment.NewLine +
+                     "允许的字符是从A到Z和数字的任何字符.";
                 }
             }
 
             if (name.Length > ClientConfiguration.Instance.MaxNameLength)
-                return "Your nickname is too long.";
+                return "你的昵称太长了.";
 
             return null;
         }
@@ -59,7 +59,7 @@ namespace ClientCore.CnCNet5
 
             if (validName.Length > ClientConfiguration.Instance.MaxNameLength)
                 return validName.Substring(0, ClientConfiguration.Instance.MaxNameLength);
-            
+
             return validName;
         }
     }

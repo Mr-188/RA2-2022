@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace DTAClient.Domain.Multiplayer
 {
@@ -7,7 +7,7 @@ namespace DTAClient.Domain.Multiplayer
     {
         [JsonProperty("n")]
         public string Name { get; set; }
-        
+
         [JsonProperty("m")]
         public List<TeamStartMapping> TeamStartMappings { get; set; }
     }

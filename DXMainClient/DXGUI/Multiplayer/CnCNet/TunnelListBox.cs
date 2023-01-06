@@ -5,9 +5,6 @@ using Rampastring.XNAUI;
 using Rampastring.XNAUI.XNAControls;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DTAClient.DXGUI.Multiplayer.CnCNet
 {
@@ -31,10 +28,10 @@ namespace DTAClient.DXGUI.Multiplayer.CnCNet
             Height = LineHeight * 12 + headerHeight + 3;
             PanelBackgroundDrawMode = PanelBackgroundImageDrawMode.STRETCHED;
             BackgroundTexture = AssetLoader.CreateTexture(new Color(0, 0, 0, 128), 1, 1);
-            AddColumn("Name", 230);
-            AddColumn("Official", 70);
-            AddColumn("Ping", 76);
-            AddColumn("Players", 90);
+            AddColumn("名称", 230);
+            AddColumn("官方", 70);
+            AddColumn("延迟", 76);
+            AddColumn("玩家数", 90);
             AllowRightClickUnselect = false;
             AllowKeyboardInput = true;
         }

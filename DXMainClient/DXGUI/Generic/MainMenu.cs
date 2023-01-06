@@ -18,6 +18,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using Updater;
 
@@ -77,7 +78,7 @@ namespace DTAClient.DXGUI.Generic
         private bool UpdateInProgress
         {
             get { return _updateInProgress; }
-            set 
+            set
             {
                 _updateInProgress = value;
                 topBar.SetSwitchButtonsClickable(!_updateInProgress);
@@ -99,6 +100,8 @@ namespace DTAClient.DXGUI.Generic
         private readonly bool isMediaPlayerAvailable;
 
         private CancellationTokenSource cncnetPlayerCountCancellationSource;
+
+        private string FA2Path;
 
         // Main Menu Buttons
         private XNAClientButton btnNewCampaign;
@@ -130,6 +133,7 @@ namespace DTAClient.DXGUI.Generic
             btnNewCampaign.IdleTexture = AssetLoader.LoadTexture("MainMenu/campaign.png");
             btnNewCampaign.HoverTexture = AssetLoader.LoadTexture("MainMenu/campaign_c.png");
             btnNewCampaign.HoverSoundEffect = new EnhancedSoundEffect("MainMenu/button.wav");
+            btnNewCampaign.Text = "战役";
             btnNewCampaign.LeftClick += BtnNewCampaign_LeftClick;
 
             btnLoadGame = new XNAClientButton(WindowManager);
@@ -137,6 +141,7 @@ namespace DTAClient.DXGUI.Generic
             btnLoadGame.IdleTexture = AssetLoader.LoadTexture("MainMenu/loadmission.png");
             btnLoadGame.HoverTexture = AssetLoader.LoadTexture("MainMenu/loadmission_c.png");
             btnLoadGame.HoverSoundEffect = new EnhancedSoundEffect("MainMenu/button.wav");
+            btnLoadGame.Text = "载入存档";
             btnLoadGame.LeftClick += BtnLoadGame_LeftClick;
 
             btnSkirmish = new XNAClientButton(WindowManager);
@@ -144,6 +149,7 @@ namespace DTAClient.DXGUI.Generic
             btnSkirmish.IdleTexture = AssetLoader.LoadTexture("MainMenu/skirmish.png");
             btnSkirmish.HoverTexture = AssetLoader.LoadTexture("MainMenu/skirmish_c.png");
             btnSkirmish.HoverSoundEffect = new EnhancedSoundEffect("MainMenu/button.wav");
+            btnSkirmish.Text = "遭遇战";
             btnSkirmish.LeftClick += BtnSkirmish_LeftClick;
 
             btnCnCNet = new XNAClientButton(WindowManager);
@@ -151,13 +157,16 @@ namespace DTAClient.DXGUI.Generic
             btnCnCNet.IdleTexture = AssetLoader.LoadTexture("MainMenu/cncnet.png");
             btnCnCNet.HoverTexture = AssetLoader.LoadTexture("MainMenu/cncnet_c.png");
             btnCnCNet.HoverSoundEffect = new EnhancedSoundEffect("MainMenu/button.wav");
+            btnCnCNet.Text = "联机大厅";
             btnCnCNet.LeftClick += BtnCnCNet_LeftClick;
+
 
             btnLan = new XNAClientButton(WindowManager);
             btnLan.Name = nameof(btnLan);
             btnLan.IdleTexture = AssetLoader.LoadTexture("MainMenu/lan.png");
             btnLan.HoverTexture = AssetLoader.LoadTexture("MainMenu/lan_c.png");
             btnLan.HoverSoundEffect = new EnhancedSoundEffect("MainMenu/button.wav");
+            btnLan.Text = "局域网";
             btnLan.LeftClick += BtnLan_LeftClick;
 
             btnOptions = new XNAClientButton(WindowManager);
@@ -165,6 +174,7 @@ namespace DTAClient.DXGUI.Generic
             btnOptions.IdleTexture = AssetLoader.LoadTexture("MainMenu/options.png");
             btnOptions.HoverTexture = AssetLoader.LoadTexture("MainMenu/options_c.png");
             btnOptions.HoverSoundEffect = new EnhancedSoundEffect("MainMenu/button.wav");
+            btnOptions.Text = "选项";
             btnOptions.LeftClick += BtnOptions_LeftClick;
 
             btnMapEditor = new XNAClientButton(WindowManager);
@@ -173,6 +183,8 @@ namespace DTAClient.DXGUI.Generic
             btnMapEditor.HoverTexture = AssetLoader.LoadTexture("MainMenu/mapeditor_c.png");
             btnMapEditor.HoverSoundEffect = new EnhancedSoundEffect("MainMenu/button.wav");
             btnMapEditor.LeftClick += BtnMapEditor_LeftClick;
+            btnMapEditor.Text = "地图编辑器";
+        //    btnMapEditor.Enabled = false;
 
             btnStatistics = new XNAClientButton(WindowManager);
             btnStatistics.Name = nameof(btnStatistics);
@@ -204,15 +216,18 @@ namespace DTAClient.DXGUI.Generic
 
             XNALabel lblCnCNetStatus = new XNALabel(WindowManager);
             lblCnCNetStatus.Name = nameof(lblCnCNetStatus);
-            lblCnCNetStatus.Text = "DTA players on CnCNet:";
+            lblCnCNetStatus.Text = "CNC大厅里的玩家数:";
             lblCnCNetStatus.ClientRectangle = new Rectangle(12, 9, 0, 0);
 
             lblCnCNetPlayerCount = new XNALabel(WindowManager);
             lblCnCNetPlayerCount.Name = nameof(lblCnCNetPlayerCount);
             lblCnCNetPlayerCount.Text = "-";
 
+            //版本号
             lblVersion = new XNALinkLabel(WindowManager);
             lblVersion.Name = nameof(lblVersion);
+            lblVersion.Text = "1.0";
+            lblVersion.ClientRectangle = new Rectangle(950,685,0,0);
             lblVersion.LeftClick += LblVersion_LeftClick;
 
             lblUpdateStatus = new XNALinkLabel(WindowManager);
@@ -233,7 +248,7 @@ namespace DTAClient.DXGUI.Generic
             AddChild(btnExit);
             AddChild(lblCnCNetStatus);
             AddChild(lblCnCNetPlayerCount);
-
+            AddChild(lblVersion);
             if (!ClientConfiguration.Instance.ModMode)
             {
                 // ModMode disables version tracking and the updater if it's enabled
@@ -243,6 +258,20 @@ namespace DTAClient.DXGUI.Generic
 
                 CUpdater.FileIdentifiersUpdated += CUpdater_FileIdentifiersUpdated;
                 CUpdater.OnCustomComponentsOutdated += CUpdater_OnCustomComponentsOutdated;
+            }
+
+
+            FA2Path = ProgramConstants.GamePath + ClientConfiguration.Instance.MapEditorExePath;
+            if (!File.Exists(FA2Path))
+            {
+                Logger.Log("没有找到地编");
+                btnMapEditor.Enabled = false;
+            }
+            else
+            {
+                IniFile ini = new IniFile(ProgramConstants.GamePath + "FinalAlert2SP/FinalAlert.ini", Encoding.GetEncoding("GBK"));
+                ini.SetStringValue("TS", "Exe", (Encoding.GetEncoding("GBK").GetString(Encoding.Default.GetBytes(ProgramConstants.GamePath))+ "gamemd.exe").Replace('/','\\')); //地编路径必须是\，这里写两个是因为有一个是转义符
+                ini.WriteIniFile();
             }
 
             base.Initialize(); // Read control attributes from INI
@@ -256,7 +285,7 @@ namespace DTAClient.DXGUI.Generic
             AddChild(innerPanel);
             innerPanel.Hide();
 
-            lblVersion.Text = CUpdater.GameVersion;
+            //lblVersion.Text = CUpdater.GameVersion;
 
             innerPanel.UpdateQueryWindow.UpdateDeclined += UpdateQueryWindow_UpdateDeclined;
             innerPanel.UpdateQueryWindow.UpdateAccepted += UpdateQueryWindow_UpdateAccepted;
@@ -268,7 +297,7 @@ namespace DTAClient.DXGUI.Generic
             this.ClientRectangle = new Rectangle((WindowManager.RenderResolutionX - Width) / 2,
                 (WindowManager.RenderResolutionY - Height) / 2,
                 Width, Height);
-            innerPanel.ClientRectangle = new Rectangle(0, 0, 
+            innerPanel.ClientRectangle = new Rectangle(0, 0,
                 Math.Max(WindowManager.RenderResolutionX, Width),
                 Math.Max(WindowManager.RenderResolutionY, Height));
 
@@ -381,7 +410,7 @@ namespace DTAClient.DXGUI.Generic
 
             if (!connectionManager.IsConnected)
                 ProgramConstants.PLAYERNAME = UserINISettings.Instance.PlayerName;
-                
+
             if (UserINISettings.Instance.DiscordIntegration)
                 discordHandler?.Connect();
             else
@@ -401,17 +430,17 @@ namespace DTAClient.DXGUI.Generic
             if (absentFiles.Count > 0)
                 XNAMessageBox.Show(WindowManager, "Missing Files",
 #if ARES
-                    "You are missing Yuri's Revenge files that are required" + Environment.NewLine +
-                    "to play this mod! Yuri's Revenge mods are not standalone," + Environment.NewLine +
-                    "so you need a copy of following Yuri's Revenge (v. 1.001)" + Environment.NewLine +
-                    "files placed in the mod folder to play the mod:" +
+                    "你丢失了尤里的复仇计划运行时所需的文件" + Environment.NewLine +
+                    "游戏并不是独立的," + Environment.NewLine +
+                    "因此你需要一份完整的尤里的复仇1.001文件" + Environment.NewLine +
+                    "放在游戏文件夹中以游玩本游戏:" +
 #else
                     "The following required files are missing:" +
 #endif
                     Environment.NewLine + Environment.NewLine +
                     String.Join(Environment.NewLine, absentFiles) +
                     Environment.NewLine + Environment.NewLine +
-                    "You won't be able to play without those files.");
+                    "没有那些文件你就不能玩了.");
         }
 
         private void CheckForbiddenFiles()
@@ -420,7 +449,7 @@ namespace DTAClient.DXGUI.Generic
                 .FindAll(f => !string.IsNullOrWhiteSpace(f) && File.Exists(ProgramConstants.GamePath + f));
 
             if (presentFiles.Count > 0)
-                XNAMessageBox.Show(WindowManager, "Interfering Files Detected",
+                XNAMessageBox.Show(WindowManager, "检测到干扰文件",
 #if TS
                     "You have installed the mod on top of a Tiberian Sun" + Environment.NewLine +
                     "copy! This mod is standalone, therefore you have to" + Environment.NewLine +
@@ -429,11 +458,11 @@ namespace DTAClient.DXGUI.Generic
                     Environment.NewLine + Environment.NewLine +
                     "Please reinstall the mod into an empty folder to play."
 #else
-                    "The following interfering files are present:" +
+                    "出现了以下干扰文件:" +
                     Environment.NewLine + Environment.NewLine +
                     String.Join(Environment.NewLine, presentFiles) +
                     Environment.NewLine + Environment.NewLine +
-                    "The mod won't work correctly without those files removed."
+                    "没有删除这些文件，游戏可能将无法正常工作."
 #endif
                     );
         }
@@ -450,10 +479,12 @@ namespace DTAClient.DXGUI.Generic
                 UserINISettings.Instance.IsFirstRun.Value = false;
                 UserINISettings.Instance.SaveSettings();
 
-                firstRunMessageBox = XNAMessageBox.ShowYesNoDialog(WindowManager, "Initial Installation",
-                    string.Format("You have just installed {0}." + Environment.NewLine +
-                    "It's highly recommended that you configure your settings before playing." +
-                    Environment.NewLine + "Do you want to configure them now?", ClientConfiguration.Instance.LocalGame));
+
+                firstRunMessageBox = XNAMessageBox.ShowYesNoDialog(WindowManager, "初次运行",
+                    string.Format("检测到你是第一次运行{0}." + Environment.NewLine +
+                    "强烈建议你在进行游戏之前调整游戏设置." +
+                    Environment.NewLine + "你想要现在进行配置吗？", ClientConfiguration.Instance.LocalGame));
+
                 firstRunMessageBox.YesClickedAction = FirstRunMessageBox_YesClicked;
                 firstRunMessageBox.NoClickedAction = FirstRunMessageBox_NoClicked;
             }
@@ -533,7 +564,7 @@ namespace DTAClient.DXGUI.Generic
                 if (UserINISettings.Instance.CheckForUpdates)
                     CheckForUpdates();
                 else
-                    lblUpdateStatus.Text = "Click to check for updates.";
+                    lblUpdateStatus.Text = "单击以检查更新.";
             }
 
             CheckRequiredFiles();
@@ -581,7 +612,7 @@ namespace DTAClient.DXGUI.Generic
         {
             innerPanel.Hide();
             lblUpdateStatus.Text = MainClientConstants.GAME_NAME_SHORT + " was succesfully updated to v." + CUpdater.GameVersion;
-            lblVersion.Text = CUpdater.GameVersion;
+            //lblVersion.Text = CUpdater.GameVersion;
             UpdateInProgress = false;
             lblUpdateStatus.Enabled = true;
             lblUpdateStatus.DrawUnderline = false;
@@ -964,19 +995,30 @@ namespace DTAClient.DXGUI.Generic
             OSVersion osVersion = ClientConfiguration.Instance.GetOperatingSystemVersion();
             Process mapEditorProcess = new Process();
 
-            if (osVersion != OSVersion.UNIX)
-            {
-                mapEditorProcess.StartInfo.FileName = ProgramConstants.GamePath + ClientConfiguration.Instance.MapEditorExePath;
-            }
-            else
-            {
-                mapEditorProcess.StartInfo.FileName = ProgramConstants.GamePath + ClientConfiguration.Instance.UnixMapEditorExePath;
-                mapEditorProcess.StartInfo.UseShellExecute = false;
-            }
+           string strCmdText = string.Format("/c cd /d {0} && FinalAlert2SP.exe", ProgramConstants.GamePath+ "FinalAlert2SP");
 
+            mapEditorProcess.StartInfo.FileName = "cmd.exe";
+            mapEditorProcess.StartInfo.Arguments = strCmdText;
+            mapEditorProcess.StartInfo.UseShellExecute = false;   //是否使用操作系统shell启动 
+            mapEditorProcess.StartInfo.CreateNoWindow = true;   //是否在新窗口中启动该进程的值 (不显示程序窗口)
             mapEditorProcess.Start();
+            mapEditorProcess.WaitForExit();  //等待程序执行完退出进程
+            mapEditorProcess.Close();
+
+     //       if (osVersion != OSVersion.UNIX)
+      //      {
+         //
+      //      }
+      //      else
+       //     {
+      //          mapEditorProcess.StartInfo.FileName = FA2Path;
+                
+        //        mapEditorProcess.StartInfo.UseShellExecute = false;
+        //    }
+
+        //    mapEditorProcess.Start();
         }
 
-        public string GetSwitchName() => "Main Menu";
+        public string GetSwitchName() => "主菜单";
     }
 }

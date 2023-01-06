@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using ClientGUI;
+﻿using ClientGUI;
 using DTAClient.Domain.Multiplayer;
 using Microsoft.Xna.Framework;
 using Rampastring.XNAUI;
 using Rampastring.XNAUI.XNAControls;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace DTAClient.DXGUI.Multiplayer
 {
@@ -244,7 +244,7 @@ namespace DTAClient.DXGUI.Multiplayer
 
         private void BtnHelp_LeftClick(object sender, EventArgs args)
         {
-            XNAMessageBox.Show(WindowManager, "Auto Allying", 
+            XNAMessageBox.Show(WindowManager, "Auto Allying",
                 "Auto allying allows the host to assign starting locations to teams, not players.\n" +
                 "When players are assigned to spawn locations, they will be auto assigned to teams based on these mappings.\n" +
                 "This is best used with random teams and random starts. However, only random teams is required.\n" +
@@ -264,8 +264,8 @@ namespace DTAClient.DXGUI.Multiplayer
             RefreshTeamStartMappingPanels();
         }
 
-        public List<TeamStartMapping> GetTeamStartMappings() 
-            => chkBoxUseTeamStartMappings.Checked ? 
+        public List<TeamStartMapping> GetTeamStartMappings()
+            => chkBoxUseTeamStartMappings.Checked ?
                 teamStartMappingsPanel.GetTeamStartMappings() : new List<TeamStartMapping>();
 
         public void EnableControls(bool enable)
@@ -279,7 +279,7 @@ namespace DTAClient.DXGUI.Multiplayer
             teamStartMappingsPanel.EnableControls(enable && chkBoxUseTeamStartMappings.Checked);
         }
 
-        public PlayerExtraOptions GetPlayerExtraOptions() 
+        public PlayerExtraOptions GetPlayerExtraOptions()
             => new PlayerExtraOptions()
             {
                 IsForceRandomSides = IsForcedRandomSides(),

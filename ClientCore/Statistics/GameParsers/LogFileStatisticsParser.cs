@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Rampastring.Tools;
+using System;
 using System.Collections.Generic;
 using System.IO;
-using Rampastring.Tools;
 
 namespace ClientCore.Statistics.GameParsers
 {
@@ -116,7 +116,7 @@ namespace ClientCore.Statistics.GameParsers
                         currentPlayer.Kills = Int32.Parse(line.Substring(8));
                     else if (line.StartsWith("Score = "))
                         currentPlayer.Score = Int32.Parse(line.Substring(8));
-                    else if (line.StartsWith(economyString+ " = "))
+                    else if (line.StartsWith(economyString + " = "))
                         currentPlayer.Economy = Int32.Parse(line.Substring(economyString.Length + 2));
                 }
 

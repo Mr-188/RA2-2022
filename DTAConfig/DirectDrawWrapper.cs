@@ -1,10 +1,11 @@
 ﻿using ClientCore;
+using ClientGUI;
 using Rampastring.Tools;
+using Rampastring.XNAUI;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace DTAConfig
 {
@@ -59,10 +60,10 @@ namespace DTAConfig
 
         public bool Hidden { get; private set; }
 
-		/// <summary>
-		/// Many ddraw wrappers need qres.dat to set the desktop to 16 bit mode
-		/// </summary>
-		public bool UseQres { get; private set; } = true;
+        /// <summary>
+        /// Many ddraw wrappers need qres.dat to set the desktop to 16 bit mode
+        /// </summary>
+        public bool UseQres { get; private set; } = true;
 
         /// <summary>
         /// If set to false, the client won't set single-core affinity
@@ -91,7 +92,7 @@ namespace DTAConfig
                 Logger.Log("DirectDrawWrapper: Configuration for renderer '" + InternalName + "' not found!");
                 return;
             }
-                
+
             UIName = section.GetStringValue("UIName", "Unnamed renderer");
 
             if (section.GetBooleanValue("IsDxWnd", false))
@@ -134,7 +135,7 @@ namespace DTAConfig
                 disallowedOSList.Add(disallowedOS);
             }
 
-            if (!string.IsNullOrEmpty(ddrawDLLPath) && 
+            if (!string.IsNullOrEmpty(ddrawDLLPath) &&
                 !File.Exists(ProgramConstants.GetBaseResourcePath() + ddrawDLLPath))
                 Logger.Log("DirectDrawWrapper: File specified in DLLPath= for renderer '" + InternalName + "' does not exist!");
 
@@ -164,15 +165,15 @@ namespace DTAConfig
         /// </summary>
         public void Apply()
         {
-            if (!string.IsNullOrEmpty(ddrawDLLPath))
-            {
-                File.Copy(ProgramConstants.GetBaseResourcePath() + ddrawDLLPath,
-                    ProgramConstants.GamePath + "ddraw.dll", true);
-            }
-            else
-                File.Delete(ProgramConstants.GamePath + "ddraw.dll");
+                if (!string.IsNullOrEmpty(ddrawDLLPath))
+                {
 
-
+                    File.Copy(ProgramConstants.GetBaseResourcePath() + ddrawDLLPath,
+                        ProgramConstants.GamePath + "ddraw.dll", true);
+                }
+                else
+                    File.Delete(ProgramConstants.GamePath + "ddraw.dll");
+  
             if (!string.IsNullOrEmpty(ConfigFileName) && !string.IsNullOrEmpty(resConfigFileName)
                 && !File.Exists(ProgramConstants.GamePath + ConfigFileName)) // Do not overwrite settings
             {
@@ -205,7 +206,7 @@ namespace DTAConfig
         /// </summary>
         public bool UsesCustomWindowedOption()
         {
-            return !string.IsNullOrEmpty(WindowedModeSection) && 
+            return !string.IsNullOrEmpty(WindowedModeSection) &&
                 !string.IsNullOrEmpty(WindowedModeKey);
         }
     }

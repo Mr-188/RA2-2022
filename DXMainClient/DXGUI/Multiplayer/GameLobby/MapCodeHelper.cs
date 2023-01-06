@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using ClientCore;
+﻿using ClientCore;
 using DTAClient.Domain.Multiplayer;
 using Rampastring.Tools;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace DTAClient.DXGUI.Multiplayer.GameLobby
 {

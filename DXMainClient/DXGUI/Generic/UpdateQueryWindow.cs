@@ -1,6 +1,5 @@
 ﻿using ClientCore;
 using ClientGUI;
-using DTAClient.Domain;
 using Microsoft.Xna.Framework;
 using Rampastring.XNAUI;
 using Rampastring.XNAUI.XNAControls;
@@ -54,13 +53,13 @@ namespace DTAClient.DXGUI.Generic
 
             var btnYes = new XNAClientButton(WindowManager);
             btnYes.ClientRectangle = new Rectangle(12, 110, 75, 23);
-            btnYes.Text = "Yes";
+            btnYes.Text = "是";
             btnYes.LeftClick += BtnYes_LeftClick;
             btnYes.Name = nameof(btnYes);
 
             var btnNo = new XNAClientButton(WindowManager);
             btnNo.ClientRectangle = new Rectangle(164, 110, 75, 23);
-            btnNo.Text = "No";
+            btnNo.Text = "否";
             btnNo.LeftClick += BtnNo_LeftClick;
             btnNo.Name = nameof(btnNo);
 

@@ -1,5 +1,5 @@
-﻿using System;
-using DTAClient.Domain.Multiplayer;
+﻿using DTAClient.Domain.Multiplayer;
+using System;
 
 namespace DTAClient.Online.EventArguments
 {

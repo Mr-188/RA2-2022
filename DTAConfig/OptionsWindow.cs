@@ -1,6 +1,7 @@
 ﻿using ClientCore;
 using ClientCore.CnCNet5;
 using ClientGUI;
+using DTAClient.DXGUI.Generic;
 using DTAConfig.OptionPanels;
 using Microsoft.Xna.Framework;
 using Rampastring.Tools;
@@ -17,12 +18,19 @@ namespace DTAConfig
         {
             this.gameCollection = gameCollection;
             this.topBar = topBar;
-        }
 
+
+        }
+        public static void AddAndInitializeWithControl(WindowManager wm, XNAControl control)
+        {
+            var dp = new DarkeningPanel(wm);
+            wm.AddAndInitializeControl(dp);
+            dp.AddChild(control);
+        }
         public event EventHandler OnForceUpdate;
 
         private XNAClientTabControl tabControl;
-
+        private ThankWindow thankWindow;
         private XNAOptionsPanel[] optionsPanels;
         private ComponentsPanel componentsPanel;
 
@@ -33,8 +41,9 @@ namespace DTAConfig
 
         public override void Initialize()
         {
+
             Name = "OptionsWindow";
-            ClientRectangle = new Rectangle(0, 0, 576, 475);
+            ClientRectangle = new Rectangle(0, 0, 800, 475);
             BackgroundTexture = AssetLoader.LoadTextureUncached("optionsbg.png");
 
             tabControl = new XNAClientTabControl(WindowManager);
@@ -42,26 +51,37 @@ namespace DTAConfig
             tabControl.ClientRectangle = new Rectangle(12, 12, 0, 23);
             tabControl.FontIndex = 1;
             tabControl.ClickSound = new EnhancedSoundEffect("button.wav");
-            tabControl.AddTab("Display", UIDesignConstants.BUTTON_WIDTH_92);
-            tabControl.AddTab("Audio", UIDesignConstants.BUTTON_WIDTH_92);
-            tabControl.AddTab("Game", UIDesignConstants.BUTTON_WIDTH_92);
+            tabControl.AddTab("显示", UIDesignConstants.BUTTON_WIDTH_92);
+            tabControl.AddTab("音频", UIDesignConstants.BUTTON_WIDTH_92);
+            tabControl.AddTab("游戏", UIDesignConstants.BUTTON_WIDTH_92);
             tabControl.AddTab("CnCNet", UIDesignConstants.BUTTON_WIDTH_92);
-            tabControl.AddTab("Updater", UIDesignConstants.BUTTON_WIDTH_92);
-            tabControl.AddTab("Components", UIDesignConstants.BUTTON_WIDTH_92);
+            tabControl.AddTab("局内皮肤", UIDesignConstants.BUTTON_WIDTH_92);
+            tabControl.AddTab("更新", UIDesignConstants.BUTTON_WIDTH_92);
+            tabControl.AddTab("组件", UIDesignConstants.BUTTON_WIDTH_92);
             tabControl.SelectedIndexChanged += TabControl_SelectedIndexChanged;
 
             var btnCancel = new XNAClientButton(WindowManager);
             btnCancel.Name = "btnCancel";
             btnCancel.ClientRectangle = new Rectangle(Width - 104,
                 Height - 35, UIDesignConstants.BUTTON_WIDTH_92, UIDesignConstants.BUTTON_HEIGHT);
-            btnCancel.Text = "Cancel";
+            btnCancel.Text = "取消";
             btnCancel.LeftClick += BtnBack_LeftClick;
 
             var btnSave = new XNAClientButton(WindowManager);
             btnSave.Name = "btnSave";
             btnSave.ClientRectangle = new Rectangle(12, btnCancel.Y, UIDesignConstants.BUTTON_WIDTH_92, UIDesignConstants.BUTTON_HEIGHT);
-            btnSave.Text = "Save";
+            btnSave.Text = "保存";
             btnSave.LeftClick += BtnSave_LeftClick;
+
+            var btnThank = new XNAClientButton(WindowManager);
+            btnThank.Name = "btnThank";
+            btnThank.ClientRectangle = new Rectangle((btnSave.X + btnCancel.X) / 2, btnSave.Y, UIDesignConstants.BUTTON_WIDTH_92, UIDesignConstants.BUTTON_HEIGHT);
+            btnThank.Text = "鸣谢列表";
+            btnThank.LeftClick += btnThank_LeftClick;
+
+            thankWindow = new ThankWindow(WindowManager);
+            AddAndInitializeWithControl(WindowManager, thankWindow);
+            thankWindow.Disable();
 
             displayOptionsPanel = new DisplayOptionsPanel(WindowManager, UserINISettings.Instance);
             componentsPanel = new ComponentsPanel(WindowManager, UserINISettings.Instance);
@@ -74,17 +94,20 @@ namespace DTAConfig
                 new AudioOptionsPanel(WindowManager, UserINISettings.Instance),
                 new GameOptionsPanel(WindowManager, UserINISettings.Instance, topBar),
                 new CnCNetOptionsPanel(WindowManager, UserINISettings.Instance, gameCollection),
+                new LocalSkinPanel(WindowManager, UserINISettings.Instance),
                 updaterOptionsPanel,
                 componentsPanel
             };
 
+            //禁用cncnet选项
+            //tabControl.MakeUnselectable(3);
             if (ClientConfiguration.Instance.ModMode || CUpdater.UPDATEMIRRORS == null || CUpdater.UPDATEMIRRORS.Count < 1)
             {
-                tabControl.MakeUnselectable(4);
                 tabControl.MakeUnselectable(5);
+                tabControl.MakeUnselectable(6);
             }
             else if (CUpdater.CustomComponents == null || CUpdater.CustomComponents.Length < 1)
-                tabControl.MakeUnselectable(5);
+                tabControl.MakeUnselectable(6);
 
             foreach (var panel in optionsPanels)
             {
@@ -98,10 +121,15 @@ namespace DTAConfig
             AddChild(tabControl);
             AddChild(btnCancel);
             AddChild(btnSave);
-
+            AddChild(btnThank);
             base.Initialize();
 
             CenterOnParent();
+        }
+        private void btnThank_LeftClick(object sender, EventArgs e)
+        {
+            thankWindow.CenterOnParent();
+            thankWindow.Enable();
         }
 
         /// <summary>
@@ -130,10 +158,10 @@ namespace DTAConfig
         {
             if (CustomComponent.IsDownloadInProgress())
             {
-                var msgBox = new XNAMessageBox(WindowManager, "Downloads in progress",
-                    "Optional component downloads are in progress. The downloads will be cancelled if you exit the Options menu." +
+                var msgBox = new XNAMessageBox(WindowManager, "下载过程中",
+                    "可选组件下载正在进行中。如果退出“选项”菜单，下载将被取消." +
                     Environment.NewLine + Environment.NewLine +
-                    "Are you sure you want to continue?", XNAMessageBoxButtons.YesNo);
+                    "您确定要继续吗?", XNAMessageBoxButtons.YesNo);
                 msgBox.Show();
                 msgBox.YesClickedAction = ExitDownloadCancelConfirmation_YesClicked;
 
@@ -155,10 +183,10 @@ namespace DTAConfig
         {
             if (CustomComponent.IsDownloadInProgress())
             {
-                var msgBox = new XNAMessageBox(WindowManager, "Downloads in progress",
-                    "Optional component downloads are in progress. The downloads will be cancelled if you exit the Options menu." +
+                var msgBox = new XNAMessageBox(WindowManager, "下载过程中",
+                    "可选组件下载正在进行中。如果退出“选项”菜单，下载将被取消." +
                     Environment.NewLine + Environment.NewLine +
-                    "Are you sure you want to continue?", XNAMessageBoxButtons.YesNo);
+                    "您确定要继续吗?", XNAMessageBoxButtons.YesNo);
                 msgBox.Show();
                 msgBox.YesClickedAction = SaveDownloadCancelConfirmation_YesClicked;
 
@@ -192,18 +220,18 @@ namespace DTAConfig
             catch (Exception ex)
             {
                 Logger.Log("Saving settings failed! Error message: " + ex.Message);
-                XNAMessageBox.Show(WindowManager, "Saving Settings Failed",
-                    "Saving settings failed! Error message: " + ex.Message);
+                XNAMessageBox.Show(WindowManager, "保存设置失败",
+                    "保存设置失败!错误消息: " + ex.Message);
             }
 
             Disable();
 
             if (restartRequired)
             {
-                var msgBox = new XNAMessageBox(WindowManager, "Restart Required",
-                    "The client needs to be restarted for some of the changes to take effect." +
+                var msgBox = new XNAMessageBox(WindowManager, "重新启动要求",
+                    "客户端需要重新启动，一些更改才能生效." +
                     Environment.NewLine + Environment.NewLine +
-                    "Do you want to restart now?", XNAMessageBoxButtons.YesNo);
+                    "你想现在重新启动吗?", XNAMessageBoxButtons.YesNo);
                 msgBox.Show();
                 msgBox.YesClickedAction = RestartMsgBox_YesClicked;
             }
@@ -227,12 +255,10 @@ namespace DTAConfig
 
             if (optionValuesChanged)
             {
-                XNAMessageBox.Show(WindowManager, "Setting Value(s) Changed",
-                    "One or more setting values are" + Environment.NewLine +
-                    "no longer available and were changed." +
+                XNAMessageBox.Show(WindowManager, "设置值(s)改变",
+                    "一个或多个设置值不再可用，已被更改." +
                     Environment.NewLine + Environment.NewLine +
-                    "You may want to verify the new setting" + Environment.NewLine +
-                    "values in client's options window.");
+                    "您可能需要验证新设置客户端选项窗口中的值");
 
                 return true;
             }

@@ -1,6 +1,10 @@
 ﻿using ClientCore;
+using DTAClient.DXGUI.Multiplayer.GameLobby;
+using Localization;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Rampastring.Tools;
 using Rampastring.XNAUI;
 using System;
@@ -8,9 +12,9 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using Newtonsoft.Json;
+using System.Security.Cryptography;
+using System.Text;
 using Utilities = Rampastring.Tools.Utilities;
-
 namespace DTAClient.Domain.Multiplayer
 {
     public struct ExtraMapPreviewTexture
@@ -40,6 +44,7 @@ namespace DTAClient.Domain.Multiplayer
             this.customMapFilePath = customMapFilePath;
             Official = string.IsNullOrEmpty(this.customMapFilePath);
         }
+    
 
         /// <summary>
         /// The name of the map.
@@ -201,6 +206,12 @@ namespace DTAClient.Domain.Multiplayer
         [JsonProperty]
         List<Point> startingLocations;
 
+        public void ClearstartingLocations()
+        {
+            waypoints.Clear();
+            startingLocations = null;
+        }
+
         [JsonProperty]
         public List<TeamStartMappingPreset> TeamStartMappingPresets = new List<TeamStartMappingPreset>();
 
@@ -249,7 +260,9 @@ namespace DTAClient.Domain.Multiplayer
 
                 var section = iniFile.GetSection(BaseFilePath);
 
-                Name = section.GetStringValue("Description", "Unnamed map");
+                //Name = section.GetStringValue("Description", "Unnamed map");
+                Name = section.GetStringValue("Description", "Unnamed map")
+                   .L10N($"UI:Map:{section.GetStringValue("UIName", string.Empty)}");
                 Author = section.GetStringValue("Author", "Unknown author");
                 GameModes = section.GetStringValue("GameModes", "Default").Split(',');
 
@@ -324,6 +337,12 @@ namespace DTAClient.Domain.Multiplayer
                     foreach (string colorIndex in disallowedColors)
                         CoopInfo.DisallowedPlayerColors.Add(int.Parse(colorIndex));
 
+                    string[] disallowedStarts = section.GetStringValue("DisallowedPlayerStarts", string.Empty).Split(
+                        new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+
+                    foreach (string startIndex in disallowedStarts)
+                        CoopInfo.DisallowedPlayerStarts.Add(int.Parse(startIndex));
+
                     CoopInfo.SetHouseInfos(section);
                 }
 
@@ -333,13 +352,13 @@ namespace DTAClient.Domain.Multiplayer
                 for (i = 0; i < MAX_PLAYERS; i++)
                 {
                     string waypoint = section.GetStringValue("Waypoint" + i, string.Empty);
-
+              //      
                     if (String.IsNullOrEmpty(waypoint))
                         break;
 
                     waypoints.Add(waypoint);
                 }
-
+       
                 GetTeamStartMappingPresets(section);
 
 #if !WINDOWSGL
@@ -404,18 +423,20 @@ namespace DTAClient.Domain.Multiplayer
             }
         }
 
-        public List<Point> GetStartingLocationPreviewCoords(Point previewSize)
+public List<Point> GetStartingLocationPreviewCoords(Point previewSize)
         {
+            
             if (startingLocations == null)
             {
+                
                 startingLocations = new List<Point>();
 
-                foreach (string waypoint in waypoints)
+            foreach (string waypoint in waypoints)
                 {
+                    
                     startingLocations.Add(GetWaypointCoords(waypoint, actualSize, localSize, previewSize));
                 }
             }
-
             return startingLocations;
         }
 
@@ -478,7 +499,7 @@ namespace DTAClient.Domain.Multiplayer
                     Logger.Log("Custom map " + customMapFilePath + " has no game modes!");
                     return false;
                 }
-                
+            
                 for (int i = 0; i < GameModes.Length; i++)
                 {
                     string gameMode = GameModes[i].Trim();
@@ -527,22 +548,30 @@ namespace DTAClient.Domain.Multiplayer
                     foreach (string colorIndex in disallowedColors)
                         CoopInfo.DisallowedPlayerColors.Add(int.Parse(colorIndex));
 
+                    string[] disallowedStarts = iniFile.GetStringValue("Basic", "DisallowedPlayerStarts", string.Empty).Split(
+                        new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+
+                    foreach (string startIndex in disallowedStarts)
+                        CoopInfo.DisallowedPlayerStarts.Add(int.Parse(startIndex));
+
                     CoopInfo.SetHouseInfos(basicSection);
                 }
 
                 localSize = iniFile.GetStringValue("Map", "LocalSize", "0,0,0,0").Split(',');
                 actualSize = iniFile.GetStringValue("Map", "Size", "0,0,0,0").Split(',');
 
+
                 for (int i = 0; i < MAX_PLAYERS; i++)
                 {
                     string waypoint = GetCustomMapIniFile().GetStringValue("Waypoints", i.ToString(), string.Empty);
-
+                    Logger.Log(waypoint);
                     if (string.IsNullOrEmpty(waypoint))
                         break;
-
+                   
                     waypoints.Add(waypoint);
                 }
                 
+
                 GetTeamStartMappingPresets(basicSection);
 
                 ParseForcedOptions(iniFile, "ForcedOptions");
@@ -556,6 +585,28 @@ namespace DTAClient.Domain.Multiplayer
                 return false;
             }
         }
+
+        //public void SetCustomwaypoints()
+        //{
+        //    waypoints.Clear();
+        //    GetCustomMapIniFile();
+        //    StreamReader reader = File.OpenText("Client/custom_map_cache");
+        //    JsonTextReader jsonTextReader = new JsonTextReader(reader);
+        //    JObject jsonObject = (JObject)JToken.ReadFrom(jsonTextReader);
+        //    try
+        //    {
+        //        MaxPlayers = jsonObject["maps"][GetFileSHA1("Maps/Custom/随机地图.map")]["waypoints"].Count();
+        //        for (int i = 0; i < jsonObject["maps"][GetFileSHA1("Maps/Custom/随机地图.map")]["waypoints"].Count(); i++)
+        //        {
+        //            waypoints.Add(jsonObject["maps"][GetFileSHA1("Maps/Custom/随机地图.map")]["waypoints"][i].ToString());
+        //        }
+        //    }
+        //    catch
+        //    {
+        //        Logger.Log("无自定义");
+        //    }
+        //    reader.Close();
+        //}
 
         private void ParseForcedOptions(IniFile iniFile, string forcedOptionsSection)
         {
@@ -589,7 +640,7 @@ namespace DTAClient.Domain.Multiplayer
 
             foreach (string key in spawnIniKeys)
             {
-                ForcedSpawnIniOptions.Add(new KeyValuePair<string, string>(key, 
+                ForcedSpawnIniOptions.Add(new KeyValuePair<string, string>(key,
                     forcedOptionsIni.GetStringValue(spawnIniOptionsSection, key, String.Empty)));
             }
         }
@@ -600,7 +651,10 @@ namespace DTAClient.Domain.Multiplayer
         public Texture2D LoadPreviewTexture()
         {
             if (File.Exists(ProgramConstants.GamePath + PreviewPath))
+            {
+             //   Logger.Log(PreviewPath);
                 return AssetLoader.LoadTextureUncached(PreviewPath);
+            }
 
             if (!Official)
             {
@@ -631,7 +685,7 @@ namespace DTAClient.Domain.Multiplayer
             return mapIni;
         }
 
-        public void ApplySpawnIniCode(IniFile spawnIni, int totalPlayerCount, 
+        public void ApplySpawnIniCode(IniFile spawnIni, int totalPlayerCount,
             int aiPlayerCount, int coopDifficultyLevel)
         {
             foreach (KeyValuePair<string, string> key in ForcedSpawnIniOptions)
@@ -658,7 +712,7 @@ namespace DTAClient.Domain.Multiplayer
                     spawnIni.SetIntValue("HouseCountries", "Multi" + multiId, houseInfo.Side);
                     spawnIni.SetIntValue("HouseColors", "Multi" + multiId, houseInfo.Color);
                     spawnIni.SetIntValue("SpawnLocations", "Multi" + multiId, houseInfo.StartingLocation);
-
+                 //   Logger.Log(houseInfo.StartingLocation.ToString());
                     multiId++;
                 }
 
@@ -751,9 +805,11 @@ namespace DTAClient.Domain.Multiplayer
         private static Point GetWaypointCoords(string waypoint, string[] actualSizeValues, string[] localSizeValues,
             Point previewSizePoint)
         {
+           
             string[] parts = waypoint.Split(',');
 
             int xCoordIndex = parts[0].Length - 3;
+
 
             int isoTileY = Convert.ToInt32(parts[0].Substring(0, xCoordIndex));
             int isoTileX = Convert.ToInt32(parts[0].Substring(xCoordIndex));
@@ -778,6 +834,7 @@ namespace DTAClient.Domain.Multiplayer
             pixelPosY = pixelPosY - (Convert.ToInt32(localSizeValues[1]) * MainClientConstants.MAP_CELL_SIZE_Y);
 
             // Calculate map size
+      
             int mapSizeX = Convert.ToInt32(localSizeValues[2]) * MainClientConstants.MAP_CELL_SIZE_X;
             int mapSizeY = Convert.ToInt32(localSizeValues[3]) * MainClientConstants.MAP_CELL_SIZE_Y;
 

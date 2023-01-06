@@ -1,8 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-using System.Linq;
-using System.Windows.Forms;
-using ClientCore;
+﻿using ClientCore;
 using ClientCore.Extensions;
 using ClientGUI;
 using DTAClient.Online;
@@ -10,20 +6,24 @@ using DTAClient.Online.EventArguments;
 using Microsoft.Xna.Framework;
 using Rampastring.XNAUI;
 using Rampastring.XNAUI.XNAControls;
+using System;
+using System.Diagnostics;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace DTAClient.DXGUI.Multiplayer.CnCNet
 {
     public class GlobalContextMenu : XNAContextMenu
     {
-        private const string PRIVATE_MESSAGE = "Private Message";
-        private const string ADD_FRIEND = "Add Friend";
-        private const string REMOVE_FRIEND = "Remove Friend";
-        private const string BLOCK = "Block";
-        private const string UNBLOCK = "Unblock";
-        private const string INVITE = "Invite";
-        private const string JOIN = "Join";
-        private const string COPY_LINK = "Copy Link";
-        private const string OPEN_LINK = "Open Link";
+        private const string PRIVATE_MESSAGE = "私信";
+        private const string ADD_FRIEND = "添加好友";
+        private const string REMOVE_FRIEND = "删除好友";
+        private const string BLOCK = "锁定";
+        private const string UNBLOCK = "解锁";
+        private const string INVITE = "邀请";
+        private const string JOIN = "加入";
+        private const string COPY_LINK = "复制链接";
+        private const string OPEN_LINK = "打开链接";
 
         private readonly CnCNetUserData cncnetUserData;
         private readonly PrivateMessagingWindow pmWindow;
@@ -180,7 +180,7 @@ namespace DTAClient.DXGUI.Multiplayer.CnCNet
             }
             catch (Exception)
             {
-                XNAMessageBox.Show(WindowManager, "Error", "Unable to copy link");
+                XNAMessageBox.Show(WindowManager, "错误", "无法复制链接");
             }
         }
 

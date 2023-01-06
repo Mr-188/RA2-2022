@@ -1,9 +1,8 @@
 ﻿using ClientCore;
+using OpenMcdf;
 using Rampastring.Tools;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using OpenMcdf;
 
 namespace DTAClient.Domain
 {

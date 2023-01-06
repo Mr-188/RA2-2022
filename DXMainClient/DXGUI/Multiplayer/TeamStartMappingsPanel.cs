@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using DTAClient.Domain.Multiplayer;
+﻿using DTAClient.Domain.Multiplayer;
 using Rampastring.XNAUI;
 using Rampastring.XNAUI.XNAControls;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace DTAClient.DXGUI.Multiplayer
 {

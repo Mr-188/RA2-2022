@@ -1,14 +1,14 @@
-﻿using Microsoft.Xna.Framework;
-using Rampastring.XNAUI.XNAControls;
-using Rampastring.Tools;
-using System;
-using ClientCore;
-using Rampastring.XNAUI;
+﻿using ClientCore;
 using ClientGUI;
-using System.IO;
-using System.Threading.Tasks;
+using Microsoft.Xna.Framework;
+using Rampastring.Tools;
+using Rampastring.XNAUI;
+using Rampastring.XNAUI.XNAControls;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace DTAClient.DXGUI
 {
@@ -54,7 +54,7 @@ namespace DTAClient.DXGUI
             window.ClientRectangle = new Rectangle(0, 0, 200, 100);
 
             XNALabel explanation = new XNALabel(WindowManager);
-            explanation.Text = "A game is in progress.";
+            explanation.Text = "游戏正在进行中.";
 
             AddChild(window);
 

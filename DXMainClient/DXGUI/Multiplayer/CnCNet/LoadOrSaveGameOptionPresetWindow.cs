@@ -1,11 +1,11 @@
-﻿using System;
-using System.Linq;
-using ClientGUI;
+﻿using ClientGUI;
 using DTAClient.Domain.Multiplayer;
 using DTAClient.Online.EventArguments;
 using Microsoft.Xna.Framework;
 using Rampastring.XNAUI;
 using Rampastring.XNAUI.XNAControls;
+using System;
+using System.Linq;
 
 namespace DTAClient.DXGUI.Multiplayer.CnCNet
 {
@@ -35,7 +35,7 @@ namespace DTAClient.DXGUI.Multiplayer.CnCNet
 
         public LoadOrSaveGameOptionPresetWindow(WindowManager windowManager) : base(windowManager)
         {
-            ClientRectangle = new Rectangle(0, 0, 325, 185);
+            ClientRectangle = new Rectangle(600, 600, 325, 185);
 
             var margin = 10;
 
@@ -49,17 +49,17 @@ namespace DTAClient.DXGUI.Multiplayer.CnCNet
 
             var lblPresetName = new XNALabel(WindowManager);
             lblPresetName.Name = nameof(lblPresetName);
-            lblPresetName.Text = "Preset Name";
+            lblPresetName.Text = "预设名";
             lblPresetName.ClientRectangle = new Rectangle(
                 margin, lblHeader.Bottom + margin,
                 150, 18
             );
 
             ddiCreatePresetItem = new XNADropDownItem();
-            ddiCreatePresetItem.Text = "[Create New]";
+            ddiCreatePresetItem.Text = "[创建预设]";
 
             ddiSelectPresetItem = new XNADropDownItem();
-            ddiSelectPresetItem.Text = "[Select Preset]";
+            ddiSelectPresetItem.Text = "[选择预设]";
             ddiSelectPresetItem.Selectable = false;
 
             ddPresetSelect = new XNAClientDropDown(WindowManager);
@@ -72,7 +72,7 @@ namespace DTAClient.DXGUI.Multiplayer.CnCNet
 
             lblNewPresetName = new XNALabel(WindowManager);
             lblNewPresetName.Name = nameof(lblNewPresetName);
-            lblNewPresetName.Text = "New Preset Name";
+            lblNewPresetName.Text = "新的预设名称";
             lblNewPresetName.ClientRectangle = new Rectangle(
                 margin, ddPresetSelect.Bottom + margin,
                 150, 18
@@ -98,7 +98,7 @@ namespace DTAClient.DXGUI.Multiplayer.CnCNet
 
             btnDelete = new XNAClientButton(WindowManager);
             btnDelete.Name = nameof(btnDelete);
-            btnDelete.Text = "Delete";
+            btnDelete.Text = "删除";
             btnDelete.LeftClick += BtnDelete_LeftClick;
             btnDelete.ClientRectangle = new Rectangle(
                 btnLoadSave.Right + margin,
@@ -108,7 +108,7 @@ namespace DTAClient.DXGUI.Multiplayer.CnCNet
             );
 
             var btnCancel = new XNAClientButton(WindowManager);
-            btnCancel.Text = "Cancel";
+            btnCancel.Text = "取消";
             btnCancel.ClientRectangle = new Rectangle(
                 btnDelete.Right + margin,
                 btnLoadSave.Y,
@@ -133,7 +133,7 @@ namespace DTAClient.DXGUI.Multiplayer.CnCNet
         {
             PanelBackgroundDrawMode = PanelBackgroundImageDrawMode.STRETCHED;
             BackgroundTexture = AssetLoader.CreateTexture(new Color(0, 0, 0, 255), 1, 1);
-            
+
             base.Initialize();
         }
 
@@ -144,8 +144,8 @@ namespace DTAClient.DXGUI.Multiplayer.CnCNet
         public void Show(bool isLoad)
         {
             _isLoad = isLoad;
-            lblHeader.Text = $"{(_isLoad ? "Load" : "Save")} Preset";
-            btnLoadSave.Text = _isLoad ? "Load" : "Save";
+            lblHeader.Text = $"{(_isLoad ? "载入" : "保存")} 预设";
+            btnLoadSave.Text = _isLoad ? "载入" : "保存";
 
             if (_isLoad)
                 ShowLoad();
@@ -266,7 +266,7 @@ namespace DTAClient.DXGUI.Multiplayer.CnCNet
         private void BtnDelete_LeftClick(object sender, EventArgs e)
         {
             var selectedItem = ddPresetSelect.Items[ddPresetSelect.SelectedIndex];
-            var messageBox = XNAMessageBox.ShowYesNoDialog(WindowManager, "Confirm Preset Delete", $"Are you sure you want to delete this preset?\n\n{selectedItem.Text}");
+            var messageBox = XNAMessageBox.ShowYesNoDialog(WindowManager, "确认预设删除", $"您确定要删除此预设吗?\n\n{selectedItem.Text}");
             messageBox.YesClickedAction = box =>
             {
                 GameOptionPresets.Instance.DeletePreset(selectedItem.Text);

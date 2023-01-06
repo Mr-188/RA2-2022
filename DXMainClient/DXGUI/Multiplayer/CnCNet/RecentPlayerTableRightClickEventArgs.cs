@@ -1,5 +1,5 @@
-﻿using System;
-using DTAClient.Online;
+﻿using DTAClient.Online;
+using System;
 
 namespace DTAClient.DXGUI.Multiplayer.CnCNet
 {

@@ -1,11 +1,11 @@
-﻿using ClientGUI;
-using System;
+﻿using ClientCore;
+using ClientGUI;
+using Microsoft.Xna.Framework;
+using Rampastring.Tools;
 using Rampastring.XNAUI;
 using Rampastring.XNAUI.XNAControls;
-using Microsoft.Xna.Framework;
-using ClientCore;
+using System;
 using System.IO;
-using Rampastring.Tools;
 
 namespace DTAClient.DXGUI.Multiplayer
 {
@@ -122,7 +122,7 @@ namespace DTAClient.DXGUI.Multiplayer
                 ProgramConstants.SAVED_GAME_SPAWN_INI))
                 return false;
 
-            IniFile iniFile = new IniFile(ProgramConstants.GamePath + 
+            IniFile iniFile = new IniFile(ProgramConstants.GamePath +
                 ProgramConstants.SAVED_GAME_SPAWN_INI);
             if (iniFile.GetStringValue("Settings", "Name", string.Empty) != ProgramConstants.PLAYERNAME)
                 return false;

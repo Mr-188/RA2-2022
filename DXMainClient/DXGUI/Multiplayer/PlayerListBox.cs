@@ -1,14 +1,10 @@
 ﻿using ClientCore.CnCNet5;
-using DTAClient.DXGUI.Multiplayer.CnCNet;
 using DTAClient.Online;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Rampastring.XNAUI;
 using Rampastring.XNAUI.XNAControls;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace DTAClient.DXGUI.Multiplayer
 {
@@ -32,7 +28,7 @@ namespace DTAClient.DXGUI.Multiplayer
         public PlayerListBox(WindowManager windowManager, GameCollection gameCollection) : base(windowManager)
         {
             this.gameCollection = gameCollection;
-            
+
             Users = new List<ChannelUser>();
 
             adminGameIcon = AssetLoader.TextureFromImage(ClientCore.Properties.Resources.cncneticon);

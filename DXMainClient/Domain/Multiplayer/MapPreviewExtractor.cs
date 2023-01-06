@@ -1,4 +1,7 @@
-﻿using System;
+﻿using ClientCore;
+using lzo.net;
+using Rampastring.Tools;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -6,9 +9,6 @@ using System.IO;
 using System.IO.Compression;
 using System.Runtime.InteropServices;
 using System.Text;
-using ClientCore;
-using Rampastring.Tools;
-using lzo.net;
 
 namespace DTAClient.Domain.Multiplayer
 {
