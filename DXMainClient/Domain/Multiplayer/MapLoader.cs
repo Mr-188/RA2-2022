@@ -249,8 +249,6 @@ namespace DTAClient.Domain.Multiplayer
                 customMapCache.TryRemove(missingSHA, out _);
             }
 
-            
-
             // save cache
            CacheCustomMaps(customMapCache);
 
@@ -392,7 +390,7 @@ namespace DTAClient.Domain.Multiplayer
                         GameModes.Add(gm);
                     }
 
-                    gm.Maps.RemoveAll(g => g.Name == "随机地图");
+                    gm.Maps.RemoveAll(g => g.Name == "Standard");
                     gm.Maps.Add(map);
 
                     if (enableLogging)

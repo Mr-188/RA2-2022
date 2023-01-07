@@ -511,7 +511,10 @@ namespace DTAClient.DXGUI.Multiplayer.GameLobby
 
             ddGameModeMapFilter.AddItem(CreateGameFilterItem(FavoriteMapsLabel, new GameModeMapFilter(GetFavoriteGameModeMaps)));
             foreach (GameMode gm in GameModeMaps.GameModes)
+            {
                 ddGameModeMapFilter.AddItem(CreateGameFilterItem(gm.UIName, new GameModeMapFilter(GetGameModeMaps(gm))));
+                Logger.Log(gm.UIName);
+            }
 
             MapPreviewBox.UpdateMap();
             int i = ddGameModeMapFilter.SelectedIndex;
@@ -528,6 +531,7 @@ namespace DTAClient.DXGUI.Multiplayer.GameLobby
                 btnAginLoadMaps.OnLeftClick();
                 
                 ddGameModeMapFilter.SelectedIndex = ddGameModeMapFilter.Items.FindIndex(d => d.Text == "Standard");
+                lbGameModeMapList.SelectedIndex = lbGameModeMapList.ItemCount - 1;
 
             }
                 
